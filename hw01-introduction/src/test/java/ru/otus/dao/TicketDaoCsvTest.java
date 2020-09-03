@@ -1,27 +1,23 @@
 package ru.otus.dao;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.domain.Ticket;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("класс TicketDaoCsv")
 class TicketDaoCsvTest {
 
     private TicketDao ticketDao;
 
-    @BeforeEach
-    void setUp() {
-        ticketDao = new TicketDaoCsv();
-    }
-
     @Test
-    @DisplayName("корректно возвращает Ticket по имени")
-    void getByName() {
-        Ticket ticket = ticketDao.getByName("questions.csv");
+    @DisplayName("корректно возвращает Ticket")
+    void get() {
+        ticketDao = new TicketDaoCsv("questions.csv");
+        Ticket ticket = ticketDao.get();
         assertAll(() -> assertThat(ticket.getQuestions()).hasSize(5),
                 () -> assertThat(ticket.getQuestions().get(0).getQuestion()).isEqualTo("How much is the fish?"),
                 () -> assertThat(ticket.getQuestions().get(0).getAnswers()).hasSize(4),
@@ -45,8 +41,9 @@ class TicketDaoCsvTest {
     }
 
     @Test
-    @DisplayName("бросает TicketNotFoundException при поиске по имени если отсутствует")
-    public void getByNameTicketNotFoundException() {
-        assertThrows(TicketNotFoundException.class, () -> ticketDao.getByName("fakequestions.csv"));
+    @DisplayName("бросает TicketNotFoundException если отсутствует")
+    public void getTicketNotFoundException() {
+        ticketDao = new TicketDaoCsv("fakeQuestions.csv");
+        assertThrows(TicketNotFoundException.class, () -> ticketDao.get());
     }
 }

@@ -4,6 +4,6 @@ import ru.otus.domain.Ticket;
 
 public interface TicketDao {
 
-    Ticket getByName(String name) throws TicketNotFoundException;
+    Ticket get() throws TicketNotFoundException;
 
 }

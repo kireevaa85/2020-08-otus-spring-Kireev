@@ -6,30 +6,27 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.dao.TicketDao;
 
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("класс TicketServiceImpl")
-class TicketServiceTest {
+@DisplayName("класс TicketRunnerServiceImpl")
+class TicketRunnerServiceImplTest {
 
     @Mock
-    private TicketDao ticketDao;
+    private PrinterService printerService;
 
-    private String name;
-
-    private TicketService ticketService;
+    private RunnerService runnerService;
 
     @BeforeEach
     void setUp() {
-        name = "questions.csv";
-        ticketService = new TicketServiceImpl(ticketDao, name);
+        runnerService = new TicketRunnerServiceImpl(printerService);
     }
 
     @Test
-    void get() {
-        ticketService.get();
-        verify(ticketDao).getByName(name);
+    @DisplayName("корректно вызывает printerService")
+    void run() {
+        runnerService.run();
+        verify(printerService).print();
     }
 }

@@ -7,12 +7,11 @@ import ru.otus.domain.Ticket;
 @RequiredArgsConstructor
 public class TicketServiceImpl implements TicketService {
 
-    private final TicketDao dao;
-    private final String name;
+    private final TicketDao ticketDao;
 
     @Override
-    public Ticket get() {
-        return dao.getByName(name);
+    public Ticket getTicket() {
+        return ticketDao.get();
     }
 
 }
