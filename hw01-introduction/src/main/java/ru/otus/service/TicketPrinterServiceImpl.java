@@ -1,22 +1,21 @@
 package ru.otus.service;
 
 import lombok.RequiredArgsConstructor;
-
-import java.io.PrintStream;
+import ru.otus.domain.Ticket;
 
 @RequiredArgsConstructor
 public class TicketPrinterServiceImpl implements PrinterService {
 
-    private final TicketService ticketService;
-
-    private final PrintStream printStream;
+    private final IoStreamService ioStreamService;
 
     @Override
-    public void print() {
-        ticketService.getTicket().getQuestions().forEach(question -> {
-            printStream.println("\n" + question.getQuestion());
-            question.getAnswers().forEach(printStream::println);
+    public void print(Ticket ticket) {
+        StringBuilder sb = new StringBuilder();
+        ticket.getQuestions().forEach(question -> {
+            sb.append("\n\n").append(question.getQuestion());
+            question.getAnswers().forEach(s -> sb.append("\n").append(s));
         });
+        ioStreamService.outputString(sb.toString());
     }
 
 }

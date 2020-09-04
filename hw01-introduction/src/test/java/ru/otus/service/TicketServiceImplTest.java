@@ -28,6 +28,6 @@ class TicketServiceImplTest {
     @DisplayName("корректно вызывает ticketDao")
     void getTicket() {
         ticketService.getTicket();
-        verify(ticketDao).get();
+        verify(ticketDao).getTicket();
     }
 }

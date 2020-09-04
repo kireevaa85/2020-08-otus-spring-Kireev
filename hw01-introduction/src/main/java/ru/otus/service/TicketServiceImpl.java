@@ -11,7 +11,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public Ticket getTicket() {
-        return ticketDao.get();
+        return ticketDao.getTicket();
     }
 
 }

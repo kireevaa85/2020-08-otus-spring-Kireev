@@ -1,7 +1,9 @@
 package ru.otus.service;
 
+import ru.otus.domain.Ticket;
+
 public interface PrinterService {
 
-    void print();
+    void print(Ticket ticket);
 
 }

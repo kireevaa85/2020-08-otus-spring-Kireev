@@ -15,9 +15,9 @@ class TicketDaoCsvTest {
 
     @Test
     @DisplayName("корректно возвращает Ticket")
-    void get() {
+    void getTicket() {
         ticketDao = new TicketDaoCsv("questions.csv");
-        Ticket ticket = ticketDao.get();
+        Ticket ticket = ticketDao.getTicket();
         assertAll(() -> assertThat(ticket.getQuestions()).hasSize(5),
                 () -> assertThat(ticket.getQuestions().get(0).getQuestion()).isEqualTo("How much is the fish?"),
                 () -> assertThat(ticket.getQuestions().get(0).getAnswers()).hasSize(4),
@@ -42,8 +42,8 @@ class TicketDaoCsvTest {
 
     @Test
     @DisplayName("бросает TicketNotFoundException если отсутствует")
-    public void getTicketNotFoundException() {
+    public void getTicketTicketNotFoundException() {
         ticketDao = new TicketDaoCsv("fakeQuestions.csv");
-        assertThrows(TicketNotFoundException.class, () -> ticketDao.get());
+        assertThrows(TicketNotFoundException.class, () -> ticketDao.getTicket());
     }
 }

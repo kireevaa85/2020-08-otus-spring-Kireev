@@ -17,7 +17,7 @@ public class TicketDaoCsv implements TicketDao {
     private final String resourceName;
 
     @Override
-    public Ticket get() throws TicketNotFoundException {
+    public Ticket getTicket() throws TicketNotFoundException {
         try (InputStream i = TicketDaoCsv.class.getResourceAsStream("/" + resourceName);
              BufferedReader r = new BufferedReader(new InputStreamReader(i))) {
             List<Question> questions = new ArrayList<>();

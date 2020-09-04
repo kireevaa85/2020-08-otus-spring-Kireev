@@ -13,12 +13,16 @@
 
     <util:constant id="PRINT_STREAM" static-field="java.lang.System.out"/>
 
-    <bean id="ticketPrinterService" class="ru.otus.service.TicketPrinterServiceImpl">
-        <constructor-arg name="ticketService" ref="ticketService"/>
+    <bean id="ioStreamService" class="ru.otus.service.IoStreamServiceImpl">
         <constructor-arg name="printStream" ref="PRINT_STREAM"/>
     </bean>
 
+    <bean id="ticketPrinterService" class="ru.otus.service.TicketPrinterServiceImpl">
+        <constructor-arg name="ioStreamService" ref="ioStreamService"/>
+    </bean>
+
     <bean id="ticketRunnerService" class="ru.otus.service.TicketRunnerServiceImpl">
+        <constructor-arg name="ticketService" ref="ticketService"/>
         <constructor-arg name="printerService" ref="ticketPrinterService"/>
     </bean>
 
