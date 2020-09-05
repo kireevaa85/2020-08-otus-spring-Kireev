@@ -6,7 +6,7 @@ import ru.otus.domain.Ticket;
 
 @RequiredArgsConstructor
 @Service
-public class TicketPrinterServiceImpl implements PrinterService {
+public class TicketPrinterServiceImpl implements TicketPrinterService {
 
     private final IoStreamService ioStreamService;
 

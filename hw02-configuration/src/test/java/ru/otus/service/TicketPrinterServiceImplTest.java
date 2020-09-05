@@ -22,20 +22,20 @@ class TicketPrinterServiceImplTest {
     @Mock
     private IoStreamService ioStreamService;
 
-    private PrinterService printerService;
+    private TicketPrinterService ticketPrinterService;
 
     @BeforeEach
     void setUp() {
-        printerService = new TicketPrinterServiceImpl(ioStreamService);
+        ticketPrinterService = new TicketPrinterServiceImpl(ioStreamService);
     }
 
     @Test
     @DisplayName("корректно вызывает ticketService")
     void print() {
-        printerService.print(new Ticket(List.of(
-                new Question("q1", Arrays.asList("answ1", "answ2", "answ3")),
-                new Question("q2", List.of("answ4", "answ5", "answ6", "answ7")),
-                new Question("q3", List.of("answ8", "answ9", "answ10", "answ11", "answ12")))));
+        ticketPrinterService.print(new Ticket(List.of(
+                new Question("answ1", "q1", Arrays.asList("answ1", "answ2", "answ3")),
+                new Question("answ5", "q2", List.of("answ4", "answ5", "answ6", "answ7")),
+                new Question("answ12", "q3", List.of("answ8", "answ9", "answ10", "answ11", "answ12")))));
         verify(ioStreamService).outputString(anyString());
     }
 

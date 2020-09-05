@@ -30,7 +30,7 @@ public class TicketDaoCsv implements TicketDao {
                     continue;
                 }
                 List<String> elements = Arrays.asList(l.split(";"));
-                questions.add(new Question(elements.get(0), elements.subList(1, elements.size())));
+                questions.add(new Question(elements.get(0), elements.get(1), elements.subList(2, elements.size())));
             }
             return new Ticket(questions);
         } catch (Exception e) {

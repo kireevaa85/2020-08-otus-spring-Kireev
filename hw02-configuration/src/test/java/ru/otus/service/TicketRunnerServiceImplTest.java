@@ -23,25 +23,25 @@ class TicketRunnerServiceImplTest {
     private TicketService ticketService;
 
     @Mock
-    private PrinterService printerService;
+    private TicketPrinterService ticketPrinterService;
 
     private RunnerService runnerService;
 
     @BeforeEach
     void setUp() {
-        runnerService = new TicketRunnerServiceImpl(ticketService, printerService);
+        runnerService = new TicketRunnerServiceImpl(ticketService, ticketPrinterService);
     }
 
     @Test
     @DisplayName("корректно вызывает printerService")
     void run() {
         Ticket ticket = new Ticket(List.of(
-                new Question("q1", Arrays.asList("answ1", "answ2", "answ3")),
-                new Question("q2", List.of("answ4", "answ5", "answ6", "answ7")),
-                new Question("q3", List.of("answ8", "answ9", "answ10", "answ11", "answ12"))));
+                new Question("answ1", "q1", Arrays.asList("answ1", "answ2", "answ3")),
+                new Question("answ5", "q2", List.of("answ4", "answ5", "answ6", "answ7")),
+                new Question("answ12", "q3", List.of("answ8", "answ9", "answ10", "answ11", "answ12"))));
         when(ticketService.getTicket()).thenReturn(ticket);
         runnerService.run();
         verify(ticketService).getTicket();
-        verify(printerService).print(ticket);
+        verify(ticketPrinterService).print(ticket);
     }
 }

@@ -9,11 +9,11 @@ public class TicketRunnerServiceImpl implements RunnerService {
 
     private final TicketService ticketService;
 
-    private final PrinterService printerService;
+    private final TicketPrinterService ticketPrinterService;
 
     @Override
     public void run() {
-        printerService.print(ticketService.getTicket());
+        ticketPrinterService.print(ticketService.getTicket());
     }
 
 }

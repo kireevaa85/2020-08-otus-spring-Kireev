@@ -9,6 +9,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class Question {
 
+    private final String correctAnswer;
     private final String question;
     private final List<String> answers;
 

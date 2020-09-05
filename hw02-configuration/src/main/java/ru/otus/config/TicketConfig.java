@@ -15,7 +15,7 @@ public class TicketConfig {
 
     private final PrintStream printStream = System.out;
 
-    @Value("${ticket.dao.resourceName}")
+    @Value("${exam.ticket.resourceName}")
     private String resourceName;
 
 }
