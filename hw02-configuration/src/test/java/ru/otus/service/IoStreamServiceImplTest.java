@@ -6,31 +6,32 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.io.PrintStream;
+import ru.otus.config.TicketConfig;
 
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("класс IoStreamServiceImplTest")
 class IoStreamServiceImplTest {
 
     @Mock
-    private PrintStream printStream;
+    private TicketConfig ticketConfig;
 
     private IoStreamService ioStreamService;
 
     @BeforeEach
     void setUp() {
-        ioStreamService = new IoStreamServiceImpl(printStream);
+        ioStreamService = new IoStreamServiceImpl(ticketConfig);
     }
 
     @Test
     @DisplayName("корректно вызывает printStream")
     void outputString() {
         String str = "test string";
+        when(ticketConfig.getPrintStream()).thenReturn(System.out);
         ioStreamService.outputString(str);
-        verify(printStream).print(str);
+        verify(ticketConfig).getPrintStream();
     }
 
 }

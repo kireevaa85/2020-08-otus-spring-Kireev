@@ -2,18 +2,17 @@ package ru.otus.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.io.PrintStream;
+import ru.otus.config.TicketConfig;
 
 @RequiredArgsConstructor
 @Service
 public class IoStreamServiceImpl implements IoStreamService {
 
-    private final PrintStream printStream;
+    private final TicketConfig ticketConfig;
 
     @Override
     public void outputString(String str) {
-        printStream.print(str);
+        ticketConfig.getPrintStream().print(str);
     }
 
 }
