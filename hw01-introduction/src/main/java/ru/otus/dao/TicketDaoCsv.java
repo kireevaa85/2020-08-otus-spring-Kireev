@@ -1,8 +1,6 @@
 package ru.otus.dao;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import ru.otus.config.TicketConfig;
 import ru.otus.domain.Question;
 import ru.otus.domain.Ticket;
 
@@ -14,14 +12,13 @@ import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Component
 public class TicketDaoCsv implements TicketDao {
 
-    private final TicketConfig ticketConfig;
+    private final String resourceName;
 
     @Override
     public Ticket getTicket() throws TicketNotFoundException {
-        try (InputStream i = TicketDaoCsv.class.getResourceAsStream("/" + ticketConfig.getResourceName());
+        try (InputStream i = TicketDaoCsv.class.getResourceAsStream("/" + resourceName);
              BufferedReader r = new BufferedReader(new InputStreamReader(i))) {
             List<Question> questions = new ArrayList<>();
             String l;
@@ -34,7 +31,7 @@ public class TicketDaoCsv implements TicketDao {
             }
             return new Ticket(questions);
         } catch (Exception e) {
-            throw new TicketNotFoundException("Ticket with name " + ticketConfig.getResourceName() + " not found");
+            throw new TicketNotFoundException("Ticket with name " + resourceName + " not found");
         }
     }
 }

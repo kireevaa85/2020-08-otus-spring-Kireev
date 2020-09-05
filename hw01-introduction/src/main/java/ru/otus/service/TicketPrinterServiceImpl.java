@@ -1,11 +1,9 @@
 package ru.otus.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import ru.otus.domain.Ticket;
 
 @RequiredArgsConstructor
-@Service
 public class TicketPrinterServiceImpl implements PrinterService {
 
     private final IoStreamService ioStreamService;
