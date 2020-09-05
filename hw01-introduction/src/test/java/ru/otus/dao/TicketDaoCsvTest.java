@@ -2,21 +2,31 @@ package ru.otus.dao;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import ru.otus.config.TicketConfig;
 import ru.otus.domain.Ticket;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 @DisplayName("класс TicketDaoCsv")
 class TicketDaoCsvTest {
+
+    @Mock
+    private TicketConfig ticketConfig;
 
     private TicketDao ticketDao;
 
     @Test
     @DisplayName("корректно возвращает Ticket")
     void getTicket() {
-        ticketDao = new TicketDaoCsv("questions.csv");
+        when(ticketConfig.getResourceName()).thenReturn("questions.csv");
+        ticketDao = new TicketDaoCsv(ticketConfig);
         Ticket ticket = ticketDao.getTicket();
         assertAll(() -> assertThat(ticket.getQuestions()).hasSize(5),
                 () -> assertThat(ticket.getQuestions().get(0).getQuestion()).isEqualTo("How much is the fish?"),
@@ -43,7 +53,8 @@ class TicketDaoCsvTest {
     @Test
     @DisplayName("бросает TicketNotFoundException если отсутствует")
     public void getTicketTicketNotFoundException() {
-        ticketDao = new TicketDaoCsv("fakeQuestions.csv");
+        when(ticketConfig.getResourceName()).thenReturn("fakeQuestions.csv");
+        ticketDao = new TicketDaoCsv(ticketConfig);
         assertThrows(TicketNotFoundException.class, () -> ticketDao.getTicket());
     }
 }
