@@ -18,7 +18,7 @@ public class TicketConfig {
     @Value("${exam.ticket.resourceName}")
     private String resourceName;
 
-    @Value("exam.numberOfCorrectAnswersToPassTheExam")
+    @Value("${exam.numberOfCorrectAnswersToPassTheExam}")
     private int numberOfCorrectAnswersToPassTheExam;
 
 }
