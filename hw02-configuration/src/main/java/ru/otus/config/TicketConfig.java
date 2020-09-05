@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import java.io.InputStream;
 import java.io.PrintStream;
 
 
@@ -14,6 +15,8 @@ import java.io.PrintStream;
 public class TicketConfig {
 
     private final PrintStream printStream = System.out;
+
+    private final InputStream inputStream = System.in;
 
     @Value("${exam.ticket.resourceName}")
     private String resourceName;
