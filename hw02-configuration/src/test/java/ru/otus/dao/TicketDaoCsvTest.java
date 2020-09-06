@@ -3,10 +3,15 @@ package ru.otus.dao;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.config.TicketConfig;
 import ru.otus.domain.Ticket;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -28,31 +33,23 @@ class TicketDaoCsvTest {
         when(ticketConfig.getResourceName()).thenReturn("questions.csv");
         ticketDao = new TicketDaoCsv(ticketConfig);
         Ticket ticket = ticketDao.getTicket();
-        assertAll(() -> assertThat(ticket.getQuestions()).hasSize(5),
-                () -> assertThat(ticket.getQuestions().get(0).getQuestion()).isEqualTo("How much is the fish?"),
-                () -> assertThat(ticket.getQuestions().get(0).getAnswers()).hasSize(4),
-                () -> assertThat(ticket.getQuestions().get(0).getAnswers().get(0)).isEqualTo("1$"),
-                () -> assertThat(ticket.getQuestions().get(0).getCorrectAnswer()).isEqualTo("3$"),
 
-                () -> assertThat(ticket.getQuestions().get(1).getQuestion()).isEqualTo("What is the programmer's favorite number?"),
-                () -> assertThat(ticket.getQuestions().get(1).getAnswers()).hasSize(5),
-                () -> assertThat(ticket.getQuestions().get(1).getAnswers().get(1)).isEqualTo("32"),
-                () -> assertThat(ticket.getQuestions().get(1).getCorrectAnswer()).isEqualTo("256"),
+        Collection<Executable> executables = new ArrayList<>();
+        executables.add(() -> assertThat(ticket.getQuestions()).hasSize(5));
+        executables.addAll(executables(ticket, 0, "How much is the fish?", 4, 0, "1$", "3$"));
+        executables.addAll(executables(ticket, 1, "What is the programmer's favorite number?", 5, 1, "32", "256"));
+        executables.addAll(executables(ticket, 2, "What is the best programming language?", 6, 2, "Pascal", "Java"));
+        executables.addAll(executables(ticket, 3, "How many bits one byte contains?", 6, 3, "8", "8"));
+        executables.addAll(executables(ticket, 4, "How many days in a year?", 7, 6, "756", "365"));
 
-                () -> assertThat(ticket.getQuestions().get(2).getQuestion()).isEqualTo("What is the best programming language?"),
-                () -> assertThat(ticket.getQuestions().get(2).getAnswers()).hasSize(6),
-                () -> assertThat(ticket.getQuestions().get(2).getAnswers().get(2)).isEqualTo("Pascal"),
-                () -> assertThat(ticket.getQuestions().get(2).getCorrectAnswer()).isEqualTo("Java"),
+        assertAll(executables);
+    }
 
-                () -> assertThat(ticket.getQuestions().get(3).getQuestion()).isEqualTo("How many bits one byte contains?"),
-                () -> assertThat(ticket.getQuestions().get(3).getAnswers()).hasSize(6),
-                () -> assertThat(ticket.getQuestions().get(3).getAnswers().get(3)).isEqualTo("8"),
-                () -> assertThat(ticket.getQuestions().get(3).getCorrectAnswer()).isEqualTo("8"),
-
-                () -> assertThat(ticket.getQuestions().get(4).getQuestion()).isEqualTo("How many days in a year?"),
-                () -> assertThat(ticket.getQuestions().get(4).getAnswers()).hasSize(7),
-                () -> assertThat(ticket.getQuestions().get(4).getAnswers().get(6)).isEqualTo("756"),
-                () -> assertThat(ticket.getQuestions().get(4).getCorrectAnswer()).isEqualTo("365"));
+    private Collection<Executable> executables(Ticket ticket, int index, String question, int answerSize, int indexAnswer, String answer, String correctAnswer) {
+        return List.of(() -> assertThat(ticket.getQuestions().get(index).getQuestion()).isEqualTo(question),
+                () -> assertThat(ticket.getQuestions().get(index).getAnswers()).hasSize(answerSize),
+                () -> assertThat(ticket.getQuestions().get(index).getAnswers().get(indexAnswer)).isEqualTo(answer),
+                () -> assertThat(ticket.getQuestions().get(index).getCorrectAnswer()).isEqualTo(correctAnswer));
     }
 
     @Test

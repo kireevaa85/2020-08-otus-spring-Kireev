@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.otus.domain.Question;
 import ru.otus.domain.Ticket;
 
-import java.util.Scanner;
-
 @RequiredArgsConstructor
 @Service
 public class TicketIOServiceImpl implements TicketIOService {
@@ -39,8 +37,7 @@ public class TicketIOServiceImpl implements TicketIOService {
 
     @Override
     public String inputAnswer() {
-        Scanner scanner = new Scanner(ioService.inputString());
-        return scanner.next();
+        return ioService.inputString();
     }
 
 }

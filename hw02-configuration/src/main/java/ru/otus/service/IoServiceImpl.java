@@ -1,26 +1,38 @@
 package ru.otus.service;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.otus.config.TicketConfig;
 
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.Scanner;
 
-@RequiredArgsConstructor
 @Service
 public class IoServiceImpl implements IoService {
 
-    private final TicketConfig ticketConfig;
+    @Value("#{ T(java.lang.System).out}")
+    private PrintStream printStream;
+
+    @Value("#{ T(java.lang.System).in}")
+    private InputStream inputStream;
+
+    private Scanner scanner;
 
     @Override
     public void outputString(String str) {
-        ticketConfig.getPrintStream().print(str);
+        printStream.print(str);
     }
 
     @Override
     public String inputString() {
-        Scanner scanner = new Scanner(ticketConfig.getInputStream());
-        return scanner.next();
+        return getScanner().next();
+    }
+
+    private Scanner getScanner() {
+        if (scanner == null) {
+            scanner = new Scanner(inputStream);
+        }
+        return scanner;
     }
 
 }
