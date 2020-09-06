@@ -12,17 +12,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("класс IoStreamServiceImplTest")
-class IoStreamServiceImplTest {
+@DisplayName("класс IoServiceImplTest")
+class IoServiceImplTest {
 
     @Mock
     private TicketConfig ticketConfig;
 
-    private IoStreamService ioStreamService;
+    private IoService ioService;
 
     @BeforeEach
     void setUp() {
-        ioStreamService = new IoStreamServiceImpl(ticketConfig);
+        ioService = new IoServiceImpl(ticketConfig);
     }
 
     @Test
@@ -30,7 +30,7 @@ class IoStreamServiceImplTest {
     void outputString() {
         String str = "test string";
         when(ticketConfig.getPrintStream()).thenReturn(System.out);
-        ioStreamService.outputString(str);
+        ioService.outputString(str);
         verify(ticketConfig).getPrintStream();
     }
 

@@ -20,38 +20,38 @@ import static org.mockito.Mockito.verify;
 class TicketIOServiceImplTest {
 
     @Mock
-    private IoStreamService ioStreamService;
+    private IoService ioService;
 
     private TicketIOService ticketIOService;
 
     @BeforeEach
     void setUp() {
-        ticketIOService = new TicketIOServiceImpl(ioStreamService);
+        ticketIOService = new TicketIOServiceImpl(ioService);
     }
 
     @Test
-    @DisplayName("корректно вызывает ioStreamService")
+    @DisplayName("корректно вызывает ioService")
     void printString() {
         String str = "test string";
         ticketIOService.printString(str);
-        verify(ioStreamService).outputString(str);
+        verify(ioService).outputString(str);
     }
 
     @Test
-    @DisplayName("корректно вызывает ioStreamService")
+    @DisplayName("корректно вызывает ioService")
     void printTicket() {
         ticketIOService.printTicket(new Ticket(List.of(
                 new Question("answ1", "q1", Arrays.asList("answ1", "answ2", "answ3")),
                 new Question("answ5", "q2", List.of("answ4", "answ5", "answ6", "answ7")),
                 new Question("answ12", "q3", List.of("answ8", "answ9", "answ10", "answ11", "answ12")))));
-        verify(ioStreamService).outputString(anyString());
+        verify(ioService).outputString(anyString());
     }
 
     @Test
-    @DisplayName("корректно вызывает ioStreamService")
+    @DisplayName("корректно вызывает ioService")
     void printQuestion() {
         ticketIOService.printQuestion(new Question("answ1", "q1", Arrays.asList("answ1", "answ2", "answ3")));
-        verify(ioStreamService).outputString(anyString());
+        verify(ioService).outputString(anyString());
     }
 
 }

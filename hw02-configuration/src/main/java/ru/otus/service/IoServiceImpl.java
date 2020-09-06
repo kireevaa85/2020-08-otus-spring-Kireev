@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 @RequiredArgsConstructor
 @Service
-public class IoStreamServiceImpl implements IoStreamService {
+public class IoServiceImpl implements IoService {
 
     private final TicketConfig ticketConfig;
 

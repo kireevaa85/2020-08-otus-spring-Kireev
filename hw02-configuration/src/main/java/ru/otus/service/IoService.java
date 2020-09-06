@@ -1,6 +1,6 @@
 package ru.otus.service;
 
-public interface IoStreamService {
+public interface IoService {
 
     void outputString(String str);
 

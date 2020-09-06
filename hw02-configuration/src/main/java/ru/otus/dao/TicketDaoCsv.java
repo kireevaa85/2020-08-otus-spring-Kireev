@@ -1,7 +1,7 @@
 package ru.otus.dao;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.otus.config.TicketConfig;
 import ru.otus.domain.Question;
 import ru.otus.domain.Ticket;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Component
+@Repository
 public class TicketDaoCsv implements TicketDao {
 
     private final TicketConfig ticketConfig;

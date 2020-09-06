@@ -11,11 +11,11 @@ import java.util.Scanner;
 @Service
 public class TicketIOServiceImpl implements TicketIOService {
 
-    private final IoStreamService ioStreamService;
+    private final IoService ioService;
 
     @Override
     public void printString(String str) {
-        ioStreamService.outputString(str);
+        ioService.outputString(str);
     }
 
     @Override
@@ -25,7 +25,7 @@ public class TicketIOServiceImpl implements TicketIOService {
             sb.append("\n\n").append(question.getQuestion());
             question.getAnswers().forEach(s -> sb.append("\n").append(s));
         });
-        ioStreamService.outputString(sb.toString());
+        ioService.outputString(sb.toString());
     }
 
     @Override
@@ -34,12 +34,12 @@ public class TicketIOServiceImpl implements TicketIOService {
         sb.append("\n\n").append(question.getQuestion());
         question.getAnswers().forEach(s -> sb.append("\n").append(s));
         sb.append("\n");
-        ioStreamService.outputString(sb.toString());
+        ioService.outputString(sb.toString());
     }
 
     @Override
     public String inputAnswer() {
-        Scanner scanner = new Scanner(ioStreamService.inputString());
+        Scanner scanner = new Scanner(ioService.inputString());
         return scanner.next();
     }
 
