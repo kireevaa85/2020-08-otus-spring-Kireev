@@ -8,12 +8,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.config.TicketConfig;
 import ru.otus.domain.Question;
+import ru.otus.domain.StudentAnswers;
 import ru.otus.domain.Ticket;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,28 +44,28 @@ class ExamServiceImplTest {
     @Test
     @DisplayName("корректно сдает зачет")
     void getExamResultTrue() {
-        Map<Question, String> studentAnswers = new HashMap<>();
+        StudentAnswers studentAnswers = new StudentAnswers();
         Predicate<String> predicate = s -> s.equals("q1") || s.equals("q3") || s.equals("q5");
         ticket.getQuestions().stream()
                 .filter(q -> predicate.test(q.getQuestion()))
-                .forEach(q -> studentAnswers.put(q, q.getCorrectAnswer()));
+                .forEach(q -> studentAnswers.getAnswers().put(q, q.getCorrectAnswer()));
         ticket.getQuestions().stream()
                 .filter(q -> predicate.negate().test(q.getQuestion()))
-                .forEach(q -> studentAnswers.put(q, "fake" + q.getCorrectAnswer()));
+                .forEach(q -> studentAnswers.getAnswers().put(q, "fake" + q.getCorrectAnswer()));
         assertThat(examService.getExamResult(ticket, studentAnswers)).isTrue();
     }
 
     @Test
     @DisplayName("корректно не сдает зачет")
     void getExamResultFalse() {
-        Map<Question, String> studentAnswers = new HashMap<>();
+        StudentAnswers studentAnswers = new StudentAnswers();
         Predicate<String> predicate = s -> s.equals("q1") || s.equals("q3");
         ticket.getQuestions().stream()
                 .filter(q -> predicate.test(q.getQuestion()))
-                .forEach(q -> studentAnswers.put(q, q.getCorrectAnswer()));
+                .forEach(q -> studentAnswers.getAnswers().put(q, q.getCorrectAnswer()));
         ticket.getQuestions().stream()
                 .filter(q -> predicate.negate().test(q.getQuestion()))
-                .forEach(q -> studentAnswers.put(q, "fake" + q.getCorrectAnswer()));
+                .forEach(q -> studentAnswers.getAnswers().put(q, "fake" + q.getCorrectAnswer()));
         assertThat(examService.getExamResult(ticket, studentAnswers)).isFalse();
     }
 

@@ -1,12 +1,10 @@
 package ru.otus.service;
 
-import ru.otus.domain.Question;
+import ru.otus.domain.StudentAnswers;
 import ru.otus.domain.Ticket;
-
-import java.util.Map;
 
 public interface ExamService {
 
-    boolean getExamResult(Ticket ticket, Map<Question, String> studentAnswers);
+    boolean getExamResult(Ticket ticket, StudentAnswers studentAnswers);
 
 }
