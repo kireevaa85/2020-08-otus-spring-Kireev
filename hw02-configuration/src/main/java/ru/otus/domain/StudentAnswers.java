@@ -12,7 +12,7 @@ public class StudentAnswers {
     }
 
     public void putAnswer(Question question, String answer) {
-        answers.put(question, answer);
+        answers.put(question, answer.trim());
     }
 
 }
