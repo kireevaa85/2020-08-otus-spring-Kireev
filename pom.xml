@@ -13,6 +13,7 @@
 
     <modules>
         <module>hw01-introduction</module>
+        <module>hw02-configuration</module>
     </modules>
 
     <packaging>pom</packaging>
