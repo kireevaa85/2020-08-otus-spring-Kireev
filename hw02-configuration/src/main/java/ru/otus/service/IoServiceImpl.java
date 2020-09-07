@@ -10,13 +10,16 @@ import java.util.Scanner;
 @Service
 public class IoServiceImpl implements IoService {
 
-    @Value("#{ T(java.lang.System).out}")
-    private PrintStream printStream;
-
-    @Value("#{ T(java.lang.System).in}")
-    private InputStream inputStream;
+    private final PrintStream printStream;
+    private final InputStream inputStream;
 
     private Scanner scanner;
+
+    public IoServiceImpl(@Value("#{ T(java.lang.System).out}") PrintStream printStream,
+                         @Value("#{ T(java.lang.System).in}") InputStream inputStream) {
+        this.printStream = printStream;
+        this.inputStream = inputStream;
+    }
 
     @Override
     public void outputString(String str) {

@@ -48,10 +48,10 @@ class ExamServiceImplTest {
         Predicate<String> predicate = s -> s.equals("q1") || s.equals("q3") || s.equals("q5");
         ticket.getQuestions().stream()
                 .filter(q -> predicate.test(q.getQuestion()))
-                .forEach(q -> studentAnswers.getAnswers().put(q, q.getCorrectAnswer()));
+                .forEach(q -> studentAnswers.putAnswer(q, q.getCorrectAnswer()));
         ticket.getQuestions().stream()
                 .filter(q -> predicate.negate().test(q.getQuestion()))
-                .forEach(q -> studentAnswers.getAnswers().put(q, "fake" + q.getCorrectAnswer()));
+                .forEach(q -> studentAnswers.putAnswer(q, "fake" + q.getCorrectAnswer()));
         assertThat(examService.getExamResult(ticket, studentAnswers)).isTrue();
     }
 
@@ -62,10 +62,10 @@ class ExamServiceImplTest {
         Predicate<String> predicate = s -> s.equals("q1") || s.equals("q3");
         ticket.getQuestions().stream()
                 .filter(q -> predicate.test(q.getQuestion()))
-                .forEach(q -> studentAnswers.getAnswers().put(q, q.getCorrectAnswer()));
+                .forEach(q -> studentAnswers.putAnswer(q, q.getCorrectAnswer()));
         ticket.getQuestions().stream()
                 .filter(q -> predicate.negate().test(q.getQuestion()))
-                .forEach(q -> studentAnswers.getAnswers().put(q, "fake" + q.getCorrectAnswer()));
+                .forEach(q -> studentAnswers.putAnswer(q, "fake" + q.getCorrectAnswer()));
         assertThat(examService.getExamResult(ticket, studentAnswers)).isFalse();
     }
 

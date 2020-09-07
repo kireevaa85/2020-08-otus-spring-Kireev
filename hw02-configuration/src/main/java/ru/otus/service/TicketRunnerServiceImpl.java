@@ -29,7 +29,7 @@ public class TicketRunnerServiceImpl implements RunnerService {
         StudentAnswers studentAnswers = new StudentAnswers();
         ticket.getQuestions().forEach(question -> {
             ticketIOService.printQuestion(question);
-            studentAnswers.getAnswers().put(question, ticketIOService.inputAnswer());
+            studentAnswers.putAnswer(question, ticketIOService.inputAnswer());
         });
         return studentAnswers;
     }
