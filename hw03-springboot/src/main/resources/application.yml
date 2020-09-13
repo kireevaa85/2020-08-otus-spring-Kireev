@@ -1,0 +1,17 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info, health, beans
+
+spring:
+  messages:
+    basename: i18n/questions,i18n/examination
+
+application:
+  locale: ru_RU
+
+exam:
+  ticket:
+    resourceName: questions.csv
+    numberOfCorrectAnswersToPassTheExam: 3

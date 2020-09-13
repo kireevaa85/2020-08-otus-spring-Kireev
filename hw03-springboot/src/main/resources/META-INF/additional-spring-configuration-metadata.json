@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "exam.ticket.resourceName",
+      "type": "java.lang.String",
+      "description": "Имя ресурса - экзаменационного билета."
+    },
+    {
+      "name": "exam.ticket.numberOfCorrectAnswersToPassTheExam",
+      "type": "java.lang.String",
+      "description": "Количество правильных ответов, для сдачи экзамена."
+    },
+    {
+      "name": "application.locale",
+      "type": "java.lang.String",
+      "description": "Локаль приложения(en, ru_RU и т.п.)."
+    }
+  ] }
