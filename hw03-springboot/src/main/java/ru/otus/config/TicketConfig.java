@@ -9,9 +9,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Setter
 @ConfigurationProperties("exam.ticket")
 public class TicketConfig {
-
     private String resourceName;
-
+    private String resourceExtension;
     private int numberOfCorrectAnswersToPassTheExam;
 
 }

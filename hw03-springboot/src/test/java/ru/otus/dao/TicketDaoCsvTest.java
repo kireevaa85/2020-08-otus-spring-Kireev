@@ -1,23 +1,24 @@
 package ru.otus.dao;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.otus.config.AppConfig;
 import ru.otus.config.TicketConfig;
 import ru.otus.domain.Ticket;
-import ru.otus.service.LocalizeService;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,19 +27,22 @@ class TicketDaoCsvTest {
 
     @Mock
     private TicketConfig ticketConfig;
-
     @Mock
-    private LocalizeService localizeService;
+    private AppConfig appConfig;
 
     private TicketDao ticketDao;
+
+    @BeforeEach
+    void setUp() {
+        ticketDao = new TicketDaoCsv(ticketConfig, appConfig);
+        when(ticketConfig.getResourceName()).thenReturn("questions");
+        when(ticketConfig.getResourceExtension()).thenReturn("csv");
+        when(appConfig.getLocale()).thenReturn(Locale.ENGLISH);
+    }
 
     @Test
     @DisplayName("корректно возвращает Ticket")
     void getTicket() {
-        when(ticketConfig.getResourceName()).thenReturn("questions.csv");
-        when(localizeService.localized(anyString())).thenAnswer(invocation -> invocation.getArgument(0));
-        when(localizeService.localized(anyList())).thenAnswer(invocation -> invocation.getArgument(0));
-        ticketDao = new TicketDaoCsv(ticketConfig, localizeService);
         Ticket ticket = ticketDao.getTicket();
 
         Collection<Executable> executables = new ArrayList<>();
@@ -63,7 +67,6 @@ class TicketDaoCsvTest {
     @DisplayName("бросает TicketNotFoundException если отсутствует")
     public void getTicketTicketNotFoundException() {
         when(ticketConfig.getResourceName()).thenReturn("fakeQuestions.csv");
-        ticketDao = new TicketDaoCsv(ticketConfig, localizeService);
         assertThrows(TicketNotFoundException.class, () -> ticketDao.getTicket());
     }
 }
