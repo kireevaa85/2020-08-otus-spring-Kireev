@@ -18,14 +18,12 @@ class StudentServiceImplTest {
 
     @Mock
     private ExaminationIOService examinationIOService;
-    @Mock
-    private LocalizeService localizeService;
 
     private StudentService studentService;
 
     @BeforeEach
     void setUp() {
-        studentService = new StudentServiceImpl(examinationIOService, localizeService);
+        studentService = new StudentServiceImpl(examinationIOService);
     }
 
     @Test
@@ -33,6 +31,6 @@ class StudentServiceImplTest {
     void getStudent() {
         studentService.getStudent();
         assertAll(() -> verify(examinationIOService, times(2)).inputAnswer(),
-                () -> verify(localizeService, times(2)).localized(anyString()));
+                () -> verify(examinationIOService, times(2)).printLocalizedString(anyString()));
     }
 }

@@ -14,17 +14,15 @@ public class ExaminationRunnerServiceImpl implements RunnerService {
     private final ExaminationIOService examinationIOService;
     private final ExamService examService;
     private final StudentService studentService;
-    private final LocalizeService localizeService;
 
     @Override
     public void run() {
         Student student = studentService.getStudent();
         final String fullName = student.getFirstName() + " " + student.getSecondName();
-        examinationIOService.printString(localizeService.localized("examination.greeting3", fullName));
+        examinationIOService.printLocalizedString("examination.greeting3", fullName);
         Ticket ticket = ticketService.getTicket();
         boolean examResult = examService.getExamResult(ticket, getStudentAnswers(ticket));
-        examinationIOService.printString(examResult ? localizeService.localized("examination.done", fullName)
-                : localizeService.localized("examination.fail", fullName));
+        examinationIOService.printLocalizedString(examResult ? "examination.done" : "examination.fail", fullName);
     }
 
     private StudentAnswers getStudentAnswers(Ticket ticket) {

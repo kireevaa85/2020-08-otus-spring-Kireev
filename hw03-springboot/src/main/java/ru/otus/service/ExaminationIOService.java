@@ -5,7 +5,7 @@ import ru.otus.domain.Ticket;
 
 public interface ExaminationIOService {
 
-    void printString(String str);
+    void printLocalizedString(String code, Object... args);
 
     String inputAnswer();
 

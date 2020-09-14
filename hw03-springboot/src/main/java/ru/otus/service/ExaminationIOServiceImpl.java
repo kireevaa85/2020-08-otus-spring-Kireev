@@ -10,10 +10,11 @@ import ru.otus.domain.Ticket;
 public class ExaminationIOServiceImpl implements ExaminationIOService {
 
     private final IoService ioService;
+    private final LocalizeService localizeService;
 
     @Override
-    public void printString(String str) {
-        ioService.outputString(str);
+    public void printLocalizedString(String code, Object... args) {
+        ioService.outputString(localizeService.localized(code, args));
     }
 
     @Override
