@@ -7,10 +7,10 @@ public interface ExaminationIOService {
 
     void printString(String str);
 
+    String inputAnswer();
+
     void printTicket(Ticket ticket);
 
     void printQuestion(Question question);
-
-    String inputAnswer();
 
 }

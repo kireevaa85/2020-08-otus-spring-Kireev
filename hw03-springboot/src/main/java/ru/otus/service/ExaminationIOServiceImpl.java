@@ -17,6 +17,11 @@ public class ExaminationIOServiceImpl implements ExaminationIOService {
     }
 
     @Override
+    public String inputAnswer() {
+        return ioService.inputString();
+    }
+
+    @Override
     public void printTicket(Ticket ticket) {
         StringBuilder sb = new StringBuilder();
         ticket.getQuestions().forEach(question -> {
@@ -33,11 +38,6 @@ public class ExaminationIOServiceImpl implements ExaminationIOService {
         question.getAnswers().forEach(s -> sb.append("\n").append(s));
         sb.append("\n");
         ioService.outputString(sb.toString());
-    }
-
-    @Override
-    public String inputAnswer() {
-        return ioService.inputString();
     }
 
 }
