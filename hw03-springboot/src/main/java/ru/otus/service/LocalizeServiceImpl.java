@@ -16,13 +16,8 @@ public class LocalizeServiceImpl implements LocalizeService {
     private final AppConfig appConfig;
 
     @Override
-    public String localized(String code, Object[] args) {
+    public String localized(String code, Object... args) {
         return messageSource.getMessage(code, args, appConfig.getLocale());
-    }
-
-    @Override
-    public String localized(String code) {
-        return localized(code, null);
     }
 
     @Override

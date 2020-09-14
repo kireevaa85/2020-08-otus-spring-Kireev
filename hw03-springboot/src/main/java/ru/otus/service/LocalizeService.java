@@ -4,9 +4,7 @@ import java.util.List;
 
 public interface LocalizeService {
 
-    String localized(String code, Object[] args);
-
-    String localized(String code);
+    String localized(String code, Object... args);
 
     List<String> localized(List<String> codes);
 

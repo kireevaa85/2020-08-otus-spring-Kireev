@@ -20,11 +20,11 @@ public class ExaminationRunnerServiceImpl implements RunnerService {
     public void run() {
         Student student = studentService.getStudent();
         final String fullName = student.getFirstName() + " " + student.getSecondName();
-        examinationIOService.printString(localizeService.localized("examination.greeting3", new String[]{fullName}));
+        examinationIOService.printString(localizeService.localized("examination.greeting3", fullName));
         Ticket ticket = ticketService.getTicket();
         boolean examResult = examService.getExamResult(ticket, getStudentAnswers(ticket));
-        examinationIOService.printString(examResult ? localizeService.localized("examination.done", new String[]{fullName})
-                : localizeService.localized("examination.fail", new String[]{fullName}));
+        examinationIOService.printString(examResult ? localizeService.localized("examination.done", fullName)
+                : localizeService.localized("examination.fail", fullName));
     }
 
     private StudentAnswers getStudentAnswers(Ticket ticket) {

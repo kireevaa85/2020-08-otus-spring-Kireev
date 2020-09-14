@@ -38,7 +38,7 @@ class LocalizeServiceImplTest {
         when(appConfig.getLocale()).thenReturn(locale);
         String testCode = "testCode";
         localizeService.localized(testCode);
-        verify(messageSource).getMessage(eq(testCode), isNull(), eq(locale));
+        verify(messageSource).getMessage(eq(testCode), eq(new Object[]{}), eq(locale));
     }
 
 }
