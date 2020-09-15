@@ -6,11 +6,6 @@
       "description": "Имя ресурса - экзаменационного билета."
     },
     {
-      "name": "exam.ticket.resourceExtension",
-      "type": "java.lang.String",
-      "description": "Расширение(тип файла) ресурса - экзаменационного билета.."
-    },
-    {
       "name": "exam.ticket.numberOfCorrectAnswersToPassTheExam",
       "type": "java.lang.String",
       "description": "Количество правильных ответов, для сдачи экзамена."

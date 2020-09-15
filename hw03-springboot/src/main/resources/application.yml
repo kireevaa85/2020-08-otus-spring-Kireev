@@ -7,6 +7,5 @@ application:
 
 exam:
   ticket:
-    resourceName: questions
-    resourceExtension: csv
+    resourceName: /questions_${application.locale}.csv
     numberOfCorrectAnswersToPassTheExam: 3
