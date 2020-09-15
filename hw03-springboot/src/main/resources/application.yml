@@ -1,0 +1,11 @@
+spring:
+  messages:
+    basename: i18n/examination
+
+application:
+  locale: ru_RU
+
+exam:
+  ticket:
+    resourceName: /questions_${application.locale}.csv
+    numberOfCorrectAnswersToPassTheExam: 3
