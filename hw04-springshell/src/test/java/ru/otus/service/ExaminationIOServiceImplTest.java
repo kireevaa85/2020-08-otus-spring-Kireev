@@ -12,8 +12,8 @@ import ru.otus.domain.Ticket;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("класс ExaminationIOServiceImpl")
@@ -22,25 +22,22 @@ class ExaminationIOServiceImplTest {
     @Mock
     private IoService ioService;
     @Mock
-    private LocalizeService localizeService;
+    private LocalizedIoService localizedIoService;
 
     private ExaminationIOService examinationIOService;
 
     @BeforeEach
     void setUp() {
-        examinationIOService = new ExaminationIOServiceImpl(ioService, localizeService);
+        examinationIOService = new ExaminationIOServiceImpl(ioService, localizedIoService);
     }
 
     @Test
-    @DisplayName("корректно вызывает ioService")
+    @DisplayName("корректно вызывает localizedIoService")
     void printLocalizedString() {
         String code = "test.code";
         Object[] args = new String[]{"first", "second"};
-        String localizedString = "localizedString";
-        when(localizeService.localized(code, args)).thenReturn(localizedString);
         examinationIOService.printLocalizedString(code, args);
-        assertAll(() -> verify(localizeService).localized(code, args),
-                () -> verify(ioService).outputString(localizedString));
+        verify(localizedIoService).outputLocalizedString(code, args);
     }
 
     @Test
