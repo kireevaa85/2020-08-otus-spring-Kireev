@@ -1,11 +1,12 @@
 package ru.otus.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import ru.otus.domain.Question;
 import ru.otus.domain.Ticket;
 
@@ -15,21 +16,22 @@ import java.util.List;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 @DisplayName("класс ExaminationIOServiceImpl")
 class ExaminationIOServiceImplTest {
 
-    @Mock
+    @Configuration
+    @Import(ExaminationIOServiceImpl.class)
+    static class NestedConfiguration {
+    }
+
+    @MockBean
     private IoService ioService;
-    @Mock
+    @MockBean
     private LocalizedIoService localizedIoService;
 
+    @Autowired
     private ExaminationIOService examinationIOService;
-
-    @BeforeEach
-    void setUp() {
-        examinationIOService = new ExaminationIOServiceImpl(ioService, localizedIoService);
-    }
 
     @Test
     @DisplayName("корректно вызывает localizedIoService")

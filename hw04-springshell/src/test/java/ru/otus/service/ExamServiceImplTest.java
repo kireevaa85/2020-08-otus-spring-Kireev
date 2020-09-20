@@ -3,9 +3,11 @@ package ru.otus.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import ru.otus.config.TicketConfig;
 import ru.otus.domain.Question;
 import ru.otus.domain.StudentAnswers;
@@ -18,20 +20,25 @@ import java.util.function.Predicate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 @DisplayName("класс ExamServiceImpl")
 class ExamServiceImplTest {
 
-    @Mock
+    @Configuration
+    @Import(ExamServiceImpl.class)
+    static class NestedConfiguration {
+    }
+
+    @MockBean
     private TicketConfig ticketConfig;
 
+    @Autowired
     private ExamService examService;
 
     private Ticket ticket;
 
     @BeforeEach
     void setUp() {
-        examService = new ExamServiceImpl(ticketConfig);
         when(ticketConfig.getNumberOfCorrectAnswersToPassTheExam()).thenReturn(3);
         ticket = new Ticket(List.of(
                 new Question("answ1", "q1", Arrays.asList("answ1", "answ2", "answ3")),

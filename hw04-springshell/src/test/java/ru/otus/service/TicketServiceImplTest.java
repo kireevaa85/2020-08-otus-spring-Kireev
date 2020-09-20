@@ -1,28 +1,30 @@
 package ru.otus.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import ru.otus.dao.TicketDao;
 
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 @DisplayName("класс TicketServiceImpl")
 class TicketServiceImplTest {
 
-    @Mock
+    @Configuration
+    @Import(TicketServiceImpl.class)
+    static class NestedConfiguration {
+    }
+
+    @MockBean
     private TicketDao ticketDao;
 
+    @Autowired
     private TicketService ticketService;
-
-    @BeforeEach
-    void setUp() {
-        ticketService = new TicketServiceImpl(ticketDao);
-    }
 
     @Test
     @DisplayName("корректно вызывает ticketDao")

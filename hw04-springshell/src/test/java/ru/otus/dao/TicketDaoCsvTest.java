@@ -3,10 +3,12 @@ package ru.otus.dao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import ru.otus.config.TicketConfig;
 import ru.otus.domain.Ticket;
 
@@ -19,18 +21,23 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 @DisplayName("класс TicketDaoCsv")
 class TicketDaoCsvTest {
 
-    @Mock
+    @Configuration
+    @Import(TicketDaoCsv.class)
+    static class NestedConfiguration {
+    }
+
+    @MockBean
     private TicketConfig ticketConfig;
 
+    @Autowired
     private TicketDao ticketDao;
 
     @BeforeEach
     void setUp() {
-        ticketDao = new TicketDaoCsv(ticketConfig);
         when(ticketConfig.getResourceName()).thenReturn("/questions_en.csv");
     }
 
