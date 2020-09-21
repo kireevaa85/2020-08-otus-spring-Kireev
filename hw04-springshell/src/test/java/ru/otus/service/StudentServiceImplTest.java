@@ -1,30 +1,32 @@
 package ru.otus.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 @DisplayName("класс StudentServiceImpl")
 class StudentServiceImplTest {
 
-    @Mock
+    @Configuration
+    @Import(StudentServiceImpl.class)
+    static class NestedConfiguration {
+    }
+
+    @MockBean
     private ExaminationIOService examinationIOService;
 
+    @Autowired
     private StudentService studentService;
-
-    @BeforeEach
-    void setUp() {
-        studentService = new StudentServiceImpl(examinationIOService);
-    }
 
     @Test
     @DisplayName("корректно вызывает inputAnswer")
