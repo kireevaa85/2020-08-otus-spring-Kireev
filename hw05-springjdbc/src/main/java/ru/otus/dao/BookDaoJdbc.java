@@ -90,9 +90,11 @@ public class BookDaoJdbc implements BookDao {
             final Long id = rs.getLong("id");
             final String name = rs.getString("name");
             final Long authorId = rs.getLong("author_id");
-            final Author author = new Author(authorId, jdbc.queryForObject("select name from author where id = :id", singletonMap("id", authorId), String.class));
             final Long genreId = rs.getLong("genre_id");
-            final Genre genre = new Genre(genreId, jdbc.queryForObject("select name from genre where id = :id", singletonMap("id", genreId), String.class));
+            final Map<String, Object> params = Map.of("author_id", authorId, "genre_id", genreId);
+            Map<String, Object> map = jdbc.queryForMap("select a.name as author_name, g.name as genre_name from author a join genre g on a.id = :author_id and g.id = :genre_id", params);
+            final Author author = new Author(authorId, (String) map.get("author_name"));
+            final Genre genre = new Genre(genreId, (String) map.get("genre_name"));
             return new Book(id, name, author, genre);
         }
     }
