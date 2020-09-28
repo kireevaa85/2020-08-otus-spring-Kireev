@@ -94,10 +94,8 @@ public class BookDaoJdbc implements BookDao {
         public Book mapRow(ResultSet rs, int rowNum) throws SQLException {
             final Long id = rs.getLong("id");
             final String name = rs.getString("name");
-            final Long authorId = rs.getLong("author_id");
-            final Long genreId = rs.getLong("genre_id");
-            final Author author = new Author(authorId, rs.getString("author_name"));
-            final Genre genre = new Genre(genreId, rs.getString("genre_name"));
+            final Author author = new Author(rs.getLong("author_id"), rs.getString("author_name"));
+            final Genre genre = new Genre(rs.getLong("genre_id"), rs.getString("genre_name"));
             return new Book(id, name, author, genre);
         }
     }
