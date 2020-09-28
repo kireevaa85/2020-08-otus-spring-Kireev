@@ -23,6 +23,7 @@ import static java.util.Collections.singletonMap;
 @Repository
 public class BookDaoJdbc implements BookDao {
     private final NamedParameterJdbcOperations jdbc;
+    private final RowMapper<Book> mapper = new BookDaoJdbc.BookMapper();
 
     @Override
     public int count() {
@@ -43,30 +44,36 @@ public class BookDaoJdbc implements BookDao {
     @Override
     public Book getById(Long id) {
         final Map<String, Object> params = singletonMap("id", id);
-        return jdbc.queryForObject("select * from book where id = :id", params, new BookMapper(jdbc));
+        return jdbc.queryForObject("select b.id, b.name, b.author_id, b.genre_id, a.name as author_name, g.name as genre_name from book b " +
+                "left join author a on b.author_id = a.id left join genre g on b.genre_id = g.id where b.id = :id", params, mapper);
     }
 
     @Override
     public List<Book> getAll() {
-        return jdbc.query("select * from book", new BookMapper(jdbc));
+        return jdbc.query("select b.id, b.name, b.author_id, b.genre_id, a.name as author_name, g.name as genre_name from book b " +
+                "left join author a on b.author_id = a.id left join genre g on b.genre_id = g.id", mapper);
     }
 
     @Override
     public List<Book> getAllByAuthor(Author author) {
         final Map<String, Object> params = singletonMap("author_id", author.getId());
-        return jdbc.query("select * from book where author_id = :author_id", params, new BookMapper(jdbc));
+        return jdbc.query("select b.id, b.name, b.author_id, b.genre_id, a.name as author_name, g.name as genre_name from book b " +
+                "left join author a on b.author_id = a.id left join genre g on b.genre_id = g.id where b.author_id = :author_id", params, mapper);
     }
 
     @Override
     public List<Book> getAllByGenre(Genre genre) {
         final Map<String, Object> params = singletonMap("genre_id", genre.getId());
-        return jdbc.query("select * from book where genre_id = :genre_id", params, new BookMapper(jdbc));
+        return jdbc.query("select b.id, b.name, b.author_id, b.genre_id, a.name as author_name, g.name as genre_name from book b " +
+                "left join author a on b.author_id = a.id left join genre g on b.genre_id = g.id where b.genre_id = :genre_id", params, mapper);
     }
 
     @Override
     public List<Book> getAllByAuthorAndGenre(Author author, Genre genre) {
-        final Map<String, Object> params = Map.of("author_id", author.getId(),"genre_id", genre.getId());
-        return jdbc.query("select * from book where author_id = :author_id and genre_id = :genre_id", params, new BookMapper(jdbc));
+        final Map<String, Object> params = Map.of("author_id", author.getId(), "genre_id", genre.getId());
+        return jdbc.query("select b.id, b.name, b.author_id, b.genre_id, a.name as author_name, g.name as genre_name from book b " +
+                "left join author a on b.author_id = a.id left join genre g on b.genre_id = g.id " +
+                "where b.author_id = :author_id and b.genre_id = :genre_id", params, mapper);
     }
 
     @Override
@@ -83,18 +90,14 @@ public class BookDaoJdbc implements BookDao {
 
     @RequiredArgsConstructor
     private static class BookMapper implements RowMapper<Book> {
-        private final NamedParameterJdbcOperations jdbc;
-
         @Override
         public Book mapRow(ResultSet rs, int rowNum) throws SQLException {
             final Long id = rs.getLong("id");
             final String name = rs.getString("name");
             final Long authorId = rs.getLong("author_id");
             final Long genreId = rs.getLong("genre_id");
-            final Map<String, Object> params = Map.of("author_id", authorId, "genre_id", genreId);
-            Map<String, Object> map = jdbc.queryForMap("select a.name as author_name, g.name as genre_name from author a join genre g on a.id = :author_id and g.id = :genre_id", params);
-            final Author author = new Author(authorId, (String) map.get("author_name"));
-            final Genre genre = new Genre(genreId, (String) map.get("genre_name"));
+            final Author author = new Author(authorId, rs.getString("author_name"));
+            final Genre genre = new Genre(genreId, rs.getString("genre_name"));
             return new Book(id, name, author, genre);
         }
     }
