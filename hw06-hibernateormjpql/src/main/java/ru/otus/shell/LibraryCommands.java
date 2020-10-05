@@ -10,6 +10,7 @@ import ru.otus.domain.Genre;
 import ru.otus.service.LibraryService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @ShellComponent
@@ -27,7 +28,7 @@ public class LibraryCommands {
     }
 
     @ShellMethod(value = "Get books count", key = {"booksCount"})
-    public int count() {
+    public long count() {
         return libraryService.booksCount();
     }
 
@@ -38,8 +39,8 @@ public class LibraryCommands {
 
     @ShellMethod(value = "Get books by id", key = {"bookById"})
     public String getBookById(@ShellOption Long bookId) {
-        Book book = libraryService.getBookById(bookId);
-        return String.format("Вы взяли книгу : %s", book);
+        Optional<Book> book = libraryService.getBookById(bookId);
+        return book.isPresent() ? String.format("Вы взяли книгу : %s", book.get()) : String.format("Книги с id: %d не существует", bookId);
     }
 
     @ShellMethod(value = "Get all books", key = {"allBooks"})
@@ -75,6 +76,6 @@ public class LibraryCommands {
 
     @ShellMethod(value = "Delete book by id", key = {"deleteBookById"})
     public void deleteBooksById(@ShellOption Long bookId) {
-        libraryService.deleteBooksById(bookId);
+        libraryService.deleteBookById(bookId);
     }
 }

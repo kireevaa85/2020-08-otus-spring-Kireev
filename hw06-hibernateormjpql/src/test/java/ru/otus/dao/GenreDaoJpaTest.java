@@ -3,30 +3,31 @@ package ru.otus.dao;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.domain.Genre;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@JdbcTest
-@Import(GenreDaoJdbc.class)
+@DataJpaTest
+@Import(GenreDaoJpa.class)
 @DisplayName("Dao для работы с жанрами должно")
-class GenreDaoJdbcTest {
+class GenreDaoJpaTest {
     private static final long GENRE_ID = 3L;
     private static final String GENRE_NAME = "genreDetective";
     private static final int EXPECTED_GENRES_COUNT = 4;
 
     @Autowired
-    private GenreDaoJdbc genreDaoJdbc;
+    private GenreDaoJpa genreDaoJpa;
 
     @Test
     @DisplayName("возвращать ожидаемый жанр по его id")
     void getById() {
-        Genre actualGenre = genreDaoJdbc.getById(GENRE_ID);
-        assertThat(actualGenre)
+        Optional<Genre> actualGenre = genreDaoJpa.findById(GENRE_ID);
+        assertThat(actualGenre).isPresent().get()
                 .hasFieldOrPropertyWithValue("id", GENRE_ID)
                 .hasFieldOrPropertyWithValue("name", GENRE_NAME);
     }
@@ -34,7 +35,7 @@ class GenreDaoJdbcTest {
     @Test
     @DisplayName("возвращать все жанры")
     void getAll() {
-        List<Genre> allGenres = genreDaoJdbc.getAll();
+        List<Genre> allGenres = genreDaoJpa.findAll();
         assertThat(allGenres).hasSize(EXPECTED_GENRES_COUNT);
     }
 }

@@ -2,6 +2,7 @@ package ru.otus.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dao.AuthorDao;
 import ru.otus.dao.BookDao;
 import ru.otus.dao.GenreDao;
@@ -10,6 +11,7 @@ import ru.otus.domain.Book;
 import ru.otus.domain.Genre;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -19,57 +21,68 @@ public class LibraryServiceImpl implements LibraryService {
     private final BookDao bookDao;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Author> getAllAuthors() {
-        return authorDao.getAll();
+        return authorDao.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Genre> getAllGenres() {
-        return genreDao.getAll();
+        return genreDao.findAll();
     }
 
     @Override
-    public int booksCount() {
+    @Transactional(readOnly = true)
+    public Long booksCount() {
         return bookDao.count();
     }
 
     @Override
-    public Long insertBook(Book book) {
-        return bookDao.insert(book);
+    @Transactional
+    public Book insertBook(Book book) {
+        return bookDao.save(book);
     }
 
     @Override
-    public Book getBookById(Long id) {
-        return bookDao.getById(id);
+    @Transactional(readOnly = true)
+    public Optional<Book> getBookById(Long id) {
+        return bookDao.findById(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Book> getAllBooks() {
-        return bookDao.getAll();
+        return bookDao.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Book> getAllBooksByAuthor(Author author) {
-        return bookDao.getAllByAuthor(author);
+        return bookDao.findAllByAuthor(author);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Book> getAllBooksByGenre(Genre genre) {
-        return bookDao.getAllByGenre(genre);
+        return bookDao.findAllByGenre(genre);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Book> getAllBooksByAuthorAndGenre(Author author, Genre genre) {
-        return bookDao.getAllByAuthorAndGenre(author, genre);
+        return bookDao.findAllByAuthorAndGenre(author, genre);
     }
 
     @Override
-    public int updateBookById(Long id, String name, Author author, Genre genre) {
-        return bookDao.updateById(id, name, author.getId(), genre.getId());
+    @Transactional
+    public void updateBookById(Long id, String name, Author author, Genre genre) {
+        bookDao.updateById(id, name, author, genre);
     }
 
     @Override
-    public void deleteBooksById(Long id) {
+    @Transactional
+    public void deleteBookById(Long id) {
         bookDao.deleteById(id);
     }
 }

@@ -5,24 +5,25 @@ import ru.otus.domain.Book;
 import ru.otus.domain.Genre;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookDao {
 
-    int count();
+    Long count();
 
-    Long insert(Book book);
+    Book save(Book book);
 
-    Book getById(Long id);
+    Optional<Book> findById(Long id);
 
-    List<Book> getAll();
+    List<Book> findAll();
 
-    List<Book> getAllByAuthor(Author author);
+    List<Book> findAllByAuthor(Author author);
 
-    List<Book> getAllByGenre(Genre genre);
+    List<Book> findAllByGenre(Genre genre);
 
-    List<Book> getAllByAuthorAndGenre(Author author, Genre genre);
+    List<Book> findAllByAuthorAndGenre(Author author, Genre genre);
 
-    int updateById(Long id, String name, Long authorId, Long genreId);
+    void updateById(Long id, String name, Author author, Genre genre);
 
     void deleteById(Long id);
 

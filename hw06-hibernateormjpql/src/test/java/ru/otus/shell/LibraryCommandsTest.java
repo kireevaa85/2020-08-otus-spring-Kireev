@@ -106,9 +106,9 @@ class LibraryCommandsTest {
     }
 
     @Test
-    @DisplayName("корректно вызывает libraryService.deleteBooksById")
+    @DisplayName("корректно вызывает libraryService.deleteBookById")
     void deleteBooksById() {
         shell.evaluate(() -> COMMAND_DELETE_BOOK_BY_ID + " 1");
-        verify(libraryService).deleteBooksById(1L);
+        verify(libraryService).deleteBookById(1L);
     }
 }

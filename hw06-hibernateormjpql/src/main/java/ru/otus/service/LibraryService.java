@@ -5,6 +5,7 @@ import ru.otus.domain.Book;
 import ru.otus.domain.Genre;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface LibraryService {
 
@@ -12,11 +13,11 @@ public interface LibraryService {
 
     List<Genre> getAllGenres();
 
-    int booksCount();
+    Long booksCount();
 
-    Long insertBook(Book book);
+    Book insertBook(Book book);
 
-    Book getBookById(Long id);
+    Optional<Book> getBookById(Long id);
 
     List<Book> getAllBooks();
 
@@ -26,8 +27,8 @@ public interface LibraryService {
 
     List<Book> getAllBooksByAuthorAndGenre(Author author, Genre genre);
 
-    int updateBookById(Long id, String name, Author author, Genre genre);
+    void updateBookById(Long id, String name, Author author, Genre genre);
 
-    void deleteBooksById(Long id);
+    void deleteBookById(Long id);
 
 }
