@@ -25,7 +25,7 @@ class GenreDaoJpaTest {
 
     @Test
     @DisplayName("возвращать ожидаемый жанр по его id")
-    void getById() {
+    void findById() {
         Optional<Genre> actualGenre = genreDaoJpa.findById(GENRE_ID);
         assertThat(actualGenre).isPresent().get()
                 .hasFieldOrPropertyWithValue("id", GENRE_ID)
@@ -34,7 +34,7 @@ class GenreDaoJpaTest {
 
     @Test
     @DisplayName("возвращать все жанры")
-    void getAll() {
+    void findAll() {
         List<Genre> allGenres = genreDaoJpa.findAll();
         assertThat(allGenres).hasSize(EXPECTED_GENRES_COUNT);
     }

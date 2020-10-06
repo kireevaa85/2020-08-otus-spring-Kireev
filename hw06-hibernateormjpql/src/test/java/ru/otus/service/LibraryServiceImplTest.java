@@ -9,9 +9,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import ru.otus.dao.AuthorDao;
 import ru.otus.dao.BookDao;
+import ru.otus.dao.CommentDao;
 import ru.otus.dao.GenreDao;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
+import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
 
 import static org.mockito.Mockito.verify;
@@ -31,6 +33,8 @@ class LibraryServiceImplTest {
     private GenreDao genreDao;
     @MockBean
     private BookDao bookDao;
+    @MockBean
+    private CommentDao commentDao;
 
     @Autowired
     private LibraryService libraryService;
@@ -59,7 +63,7 @@ class LibraryServiceImplTest {
     @Test
     @DisplayName("корректно вызывать bookDao.save")
     void insertBook() {
-        Book book = new Book(null, null, new Author(null, null), new Genre(null, null));
+        Book book = new Book(null, null, new Author(null, null), new Genre(null, null), null);
         libraryService.insertBook(book);
         verify(bookDao).save(book);
     }
@@ -117,5 +121,41 @@ class LibraryServiceImplTest {
     void deleteBooksById() {
         libraryService.deleteBookById(1L);
         verify(bookDao).deleteById(1L);
+    }
+
+    @Test
+    @DisplayName("корректно вызывать commentDao.save")
+    public void insertComment() {
+        Comment comment = new Comment(1L, 1L, null, null);
+        libraryService.insertComment(comment);
+        verify(commentDao).save(comment);
+    }
+
+    @Test
+    @DisplayName("корректно вызывать commentDao.findById")
+    public void getCommentById() {
+        libraryService.getCommentById(1L);
+        verify(commentDao).findById(1L);
+    }
+
+    @Test
+    @DisplayName("корректно вызывать commentDao.findAllByBook")
+    public void getAllCommentsByBookId() {
+        libraryService.getAllCommentsByBookId(1L);
+        verify(commentDao).findAllByBookId(1L);
+    }
+
+    @Test
+    @DisplayName("корректно вызывать commentDao.updateById")
+    public void updateCommentById() {
+        libraryService.updateCommentById(1L, null, null);
+        verify(commentDao).updateById(1L, null, null);
+    }
+
+    @Test
+    @DisplayName("корректно вызывать commentDao.deleteById")
+    public void deleteCommentById() {
+        libraryService.deleteCommentById(1L);
+        verify(commentDao).deleteById(1L);
     }
 }

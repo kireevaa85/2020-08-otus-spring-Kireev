@@ -8,6 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.shell.Shell;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
+import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
 import ru.otus.service.LibraryService;
 
@@ -34,6 +35,10 @@ class LibraryCommandsTest {
     private static final String COMMAND_BOOKS_BY_BY_AUTHOR_ID_AND_GENRE_ID = "booksByAuthorIdAndGenreId";
     private static final String COMMAND_UPDATE_BOOK = "updateBook";
     private static final String COMMAND_DELETE_BOOK_BY_ID = "deleteBookById";
+    private static final String COMMAND_INSERT_COMMENT = "insertComment";
+    private static final String COMMAND_COMMENTS_BY_BOOK_ID = "commentsByBookId";
+    private static final String COMMAND_UPDATE_COMMENT = "updateComment";
+    private static final String COMMAND_DELETE_COMMENT_BY_ID = "deleteCommentById";
 
     @Test
     @DisplayName("корректно вызывает libraryService.getAllAuthors")
@@ -60,7 +65,7 @@ class LibraryCommandsTest {
     @DisplayName("корректно вызывает libraryService.insertBook")
     void insertBook() {
         shell.evaluate(() -> COMMAND_INSERT_BOOK + " bookName 1 1");
-        verify(libraryService).insertBook(new Book(null, "bookName", new Author(1L, null), new Genre(1L, null)));
+        verify(libraryService).insertBook(new Book(null, "bookName", new Author(1L, null), new Genre(1L, null), null));
     }
 
     @Test
@@ -111,4 +116,33 @@ class LibraryCommandsTest {
         shell.evaluate(() -> COMMAND_DELETE_BOOK_BY_ID + " 1");
         verify(libraryService).deleteBookById(1L);
     }
+
+    @Test
+    @DisplayName("корректно вызывает libraryService.insertComment")
+    void insertComment() {
+        shell.evaluate(() -> COMMAND_INSERT_COMMENT + " 1 authorName comment");
+        verify(libraryService).insertComment(new Comment(null, 1L, "authorName", "comment"));
+    }
+
+    @Test
+    @DisplayName("корректно вызывает libraryService.getAllCommentsByBook")
+    void getAllCommentsByBook() {
+        shell.evaluate(() -> COMMAND_COMMENTS_BY_BOOK_ID + " 1");
+        verify(libraryService).getAllCommentsByBookId(1L);
+    }
+
+    @Test
+    @DisplayName("корректно вызывает libraryService.updateCommentById")
+    void updateCommentById() {
+        shell.evaluate(() -> COMMAND_UPDATE_COMMENT + " 1 authorName comment");
+        verify(libraryService).updateCommentById(1L, "authorName", "comment");
+    }
+
+    @Test
+    @DisplayName("корректно вызывает libraryService.deleteCommentById")
+    void deleteCommentById() {
+        shell.evaluate(() -> COMMAND_DELETE_COMMENT_BY_ID + " 1");
+        verify(libraryService).deleteCommentById(1L);
+    }
+
 }

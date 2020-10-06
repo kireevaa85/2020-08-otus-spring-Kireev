@@ -43,21 +43,22 @@ class BookDaoJpaTest {
 
     @Test
     @DisplayName("добавлять книгу в БД")
-    void insert() {
+    void save() {
         Book expectedBook = new Book(null,
                 "Spring in Action",
                 em.find(Author.class, 2L),
-                em.find(Genre.class, 4L));
+                em.find(Genre.class, 4L),
+                null);
         Book savedBook = bookDaoJpa.save(expectedBook);
-        assertThat(savedBook.getId()).isEqualTo(EXPECTED_NEW_ID);
         Optional<Book> actualBook = bookDaoJpa.findById(EXPECTED_NEW_ID);
-        assertThat(actualBook).isPresent().get()
-                .isEqualTo(expectedBook);
+        assertAll(() -> assertThat(savedBook.getId()).isEqualTo(EXPECTED_NEW_ID),
+                () -> assertThat(actualBook).isPresent().get()
+                        .isEqualTo(expectedBook));
     }
 
     @Test
     @DisplayName("возвращать ожидаемую книгу по ее id")
-    void getById() {
+    void findById() {
         Optional<Book> actualBook = bookDaoJpa.findById(LONG_WALK_ID);
         assertThat(actualBook).isPresent().get()
                 .hasFieldOrPropertyWithValue("id", LONG_WALK_ID)
@@ -66,14 +67,14 @@ class BookDaoJpaTest {
 
     @Test
     @DisplayName("возвращать все книги")
-    void getAll() {
+    void findAll() {
         List<Book> allBooks = bookDaoJpa.findAll();
         assertThat(allBooks).hasSize(EXPECTED_BOOKS_COUNT);
     }
 
     @Test
     @DisplayName("возвращать все книги по автору")
-    void getAllByAuthor() {
+    void findAllByAuthor() {
         List<Book> actualBooks = bookDaoJpa.findAllByAuthor(new Author(PUSHKIN_ID, null));
         assertAll(() -> assertThat(actualBooks).hasSize(2),
                 () -> assertThat(actualBooks.stream()).allMatch(book -> book.getAuthor().getId().equals(PUSHKIN_ID)));
@@ -81,7 +82,7 @@ class BookDaoJpaTest {
 
     @Test
     @DisplayName("возвращать все книги по жанру")
-    void getAllByGenre() {
+    void findAllByGenre() {
         List<Book> actualBooks = bookDaoJpa.findAllByGenre(new Genre(HORROR_ID, null));
         assertAll(() -> assertThat(actualBooks).hasSize(2),
                 () -> assertThat(actualBooks.stream()).allMatch(book -> book.getGenre().getId().equals(HORROR_ID)));
@@ -89,7 +90,7 @@ class BookDaoJpaTest {
 
     @Test
     @DisplayName("возвращать все книги по автору и жанру")
-    void getAllByAuthorAndGenre() {
+    void findAllByAuthorAndGenre() {
         List<Book> actualBooks = bookDaoJpa.findAllByAuthorAndGenre(new Author(KING_ID, null), new Genre(HORROR_ID, null));
         assertAll(() -> assertThat(actualBooks).hasSize(2),
                 () -> assertThat(actualBooks.stream()).allMatch(book -> book.getAuthor().getId().equals(KING_ID)

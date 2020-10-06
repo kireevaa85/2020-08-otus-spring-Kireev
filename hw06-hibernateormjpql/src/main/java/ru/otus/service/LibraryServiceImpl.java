@@ -5,9 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dao.AuthorDao;
 import ru.otus.dao.BookDao;
+import ru.otus.dao.CommentDao;
 import ru.otus.dao.GenreDao;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
+import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
 
 import java.util.List;
@@ -19,6 +21,7 @@ public class LibraryServiceImpl implements LibraryService {
     private final AuthorDao authorDao;
     private final GenreDao genreDao;
     private final BookDao bookDao;
+    private final CommentDao commentDao;
 
     @Override
     @Transactional(readOnly = true)
@@ -84,5 +87,35 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional
     public void deleteBookById(Long id) {
         bookDao.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public Comment insertComment(Comment comment) {
+        return commentDao.save(comment);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Comment> getCommentById(Long id) {
+        return commentDao.findById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Comment> getAllCommentsByBookId(Long bookId) {
+        return commentDao.findAllByBookId(bookId);
+    }
+
+    @Override
+    @Transactional
+    public void updateCommentById(Long id, String authorName, String comment) {
+        commentDao.updateById(id, authorName, comment);
+    }
+
+    @Override
+    @Transactional
+    public void deleteCommentById(Long id) {
+        commentDao.deleteById(id);
     }
 }
