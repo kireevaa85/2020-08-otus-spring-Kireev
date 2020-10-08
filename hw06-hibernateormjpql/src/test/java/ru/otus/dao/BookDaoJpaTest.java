@@ -47,8 +47,7 @@ class BookDaoJpaTest {
         Book expectedBook = new Book(null,
                 "Spring in Action",
                 em.find(Author.class, 2L),
-                em.find(Genre.class, 4L),
-                null);
+                em.find(Genre.class, 4L));
         Book savedBook = bookDaoJpa.save(expectedBook);
         Optional<Book> actualBook = bookDaoJpa.findById(EXPECTED_NEW_ID);
         assertAll(() -> assertThat(savedBook.getId()).isEqualTo(EXPECTED_NEW_ID),

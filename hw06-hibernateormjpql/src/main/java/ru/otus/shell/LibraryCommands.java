@@ -37,7 +37,7 @@ public class LibraryCommands {
 
     @ShellMethod(value = "Insert book command", key = {"insertBook"})
     public void insertBook(@ShellOption String bookName, @ShellOption Long authorId, @ShellOption Long genreId) {
-        libraryService.insertBook(new Book(null, bookName, new Author(authorId, null), new Genre(genreId, null), null));
+        libraryService.insertBook(new Book(null, bookName, new Author(authorId, null), new Genre(genreId, null)));
     }
 
     @ShellMethod(value = "Get books by id", key = {"bookById"})
@@ -84,12 +84,12 @@ public class LibraryCommands {
 
     @ShellMethod(value = "Insert comment command", key = {"insertComment"})
     public void insertComment(@ShellOption Long bookId, @ShellOption String authorName, @ShellOption String comment) {
-        libraryService.insertComment(new Comment(null, bookId, authorName, comment));
+        libraryService.insertComment(new Comment(null, new Book(bookId, null, null, null), authorName, comment));
     }
 
     @ShellMethod(value = "Get comments by book id", key = {"commentsByBookId"})
-    public String getAllCommentsByBook(@ShellOption Long bookId) {
-        List<Comment> allCommentsByBook = libraryService.getAllCommentsByBookId(bookId);
+    public String getAllCommentsByBookId(@ShellOption Long bookId) {
+        List<Comment> allCommentsByBook = libraryService.getAllCommentsByBook(new Book(bookId, null, null, null));
         return String.format("Вы взяли следующие комментарии по книге : %s", allCommentsByBook);
     }
 

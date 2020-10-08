@@ -65,7 +65,7 @@ class LibraryCommandsTest {
     @DisplayName("корректно вызывает libraryService.insertBook")
     void insertBook() {
         shell.evaluate(() -> COMMAND_INSERT_BOOK + " bookName 1 1");
-        verify(libraryService).insertBook(new Book(null, "bookName", new Author(1L, null), new Genre(1L, null), null));
+        verify(libraryService).insertBook(new Book(null, "bookName", new Author(1L, null), new Genre(1L, null)));
     }
 
     @Test
@@ -121,14 +121,14 @@ class LibraryCommandsTest {
     @DisplayName("корректно вызывает libraryService.insertComment")
     void insertComment() {
         shell.evaluate(() -> COMMAND_INSERT_COMMENT + " 1 authorName comment");
-        verify(libraryService).insertComment(new Comment(null, 1L, "authorName", "comment"));
+        verify(libraryService).insertComment(new Comment(null, new Book(1L, null, null, null), "authorName", "comment"));
     }
 
     @Test
     @DisplayName("корректно вызывает libraryService.getAllCommentsByBook")
-    void getAllCommentsByBook() {
+    void getAllCommentsByBookId() {
         shell.evaluate(() -> COMMAND_COMMENTS_BY_BOOK_ID + " 1");
-        verify(libraryService).getAllCommentsByBookId(1L);
+        verify(libraryService).getAllCommentsByBook(new Book(1L, null, null, null));
     }
 
     @Test

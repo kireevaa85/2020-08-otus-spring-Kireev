@@ -63,7 +63,7 @@ class LibraryServiceImplTest {
     @Test
     @DisplayName("корректно вызывать bookDao.save")
     void insertBook() {
-        Book book = new Book(null, null, new Author(null, null), new Genre(null, null), null);
+        Book book = new Book(null, null, null, null);
         libraryService.insertBook(book);
         verify(bookDao).save(book);
     }
@@ -126,7 +126,7 @@ class LibraryServiceImplTest {
     @Test
     @DisplayName("корректно вызывать commentDao.save")
     public void insertComment() {
-        Comment comment = new Comment(1L, 1L, null, null);
+        Comment comment = new Comment(1L, null, null, null);
         libraryService.insertComment(comment);
         verify(commentDao).save(comment);
     }
@@ -140,9 +140,10 @@ class LibraryServiceImplTest {
 
     @Test
     @DisplayName("корректно вызывать commentDao.findAllByBook")
-    public void getAllCommentsByBookId() {
-        libraryService.getAllCommentsByBookId(1L);
-        verify(commentDao).findAllByBookId(1L);
+    public void getAllCommentsByBook() {
+        Book book = new Book(1L, null, null, null);
+        libraryService.getAllCommentsByBook(book);
+        verify(commentDao).findAllByBook(book);
     }
 
     @Test

@@ -36,7 +36,7 @@ public interface LibraryService {
 
     Optional<Comment> getCommentById(Long id);
 
-    List<Comment> getAllCommentsByBookId(Long bookId);
+    List<Comment> getAllCommentsByBook(Book book);
 
     void updateCommentById(Long id, String authorName, String comment);
 

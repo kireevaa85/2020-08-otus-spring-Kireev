@@ -103,8 +103,8 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Comment> getAllCommentsByBookId(Long bookId) {
-        return commentDao.findAllByBookId(bookId);
+    public List<Comment> getAllCommentsByBook(Book book) {
+        return commentDao.findAllByBook(book);
     }
 
     @Override

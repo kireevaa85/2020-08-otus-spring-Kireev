@@ -12,7 +12,7 @@ public interface CommentDao {
 
     Optional<Comment> findById(Long id);
 
-    List<Comment> findAllByBookId(Long bookId);
+    List<Comment> findAllByBook(Book book);
 
     void updateById(Long id, String authorName, String comment);
 
