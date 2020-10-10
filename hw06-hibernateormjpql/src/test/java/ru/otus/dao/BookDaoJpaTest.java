@@ -101,10 +101,9 @@ class BookDaoJpaTest {
     void updateById() {
         bookDaoJpa.updateById(LONG_WALK_ID, "testName", new Author(3L, null), new Genre(2L, null));
         Optional<Book> actualBook = bookDaoJpa.findById(LONG_WALK_ID);
-        assertAll(() -> assertThat(actualBook).isPresent(),
-                () -> assertThat(actualBook.get().getName()).isEqualTo("testName"),
-                () -> assertThat(actualBook.get().getAuthor().getId()).isEqualTo(3L),
-                () -> assertThat(actualBook.get().getGenre().getId()).isEqualTo(2L));
+        assertAll(() -> assertThat(actualBook).get().extracting(Book::getName).isEqualTo("testName"),
+                () -> assertThat(actualBook).get().extracting(Book::getAuthor).extracting(Author::getId).isEqualTo(3L),
+                () -> assertThat(actualBook).get().extracting(Book::getGenre).extracting(Genre::getId).isEqualTo(2L));
     }
 
     @Test

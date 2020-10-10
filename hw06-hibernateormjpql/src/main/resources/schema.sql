@@ -23,4 +23,5 @@ create table comments(id bigint not null auto_increment,
                       book_id bigint not null,
                       author_name varchar(255) not null default 'incognita',
                       comment text not null,
-                      primary key (id));
+                      primary key (id),
+                      foreign key (book_id) references books(id) on delete cascade);

@@ -69,10 +69,9 @@ class CommentDaoJpaTest {
     void updateById() {
         commentDaoJpa.updateById(PETR1_LONG_WALK_COMMENT_ID, "testAuthorName", "testComment");
         Optional<Comment> actualComment = commentDaoJpa.findById(PETR1_LONG_WALK_COMMENT_ID);
-        assertAll(() -> assertThat(actualComment).isPresent(),
-                () -> assertThat(actualComment.get().getBook()).isEqualTo(em.find(Book.class, LONG_WALK_BOOK_ID)),
-                () -> assertThat(actualComment.get().getAuthorName()).isEqualTo("testAuthorName"),
-                () -> assertThat(actualComment.get().getComment()).isEqualTo("testComment"));
+        assertAll(() -> assertThat(actualComment).get().extracting(Comment::getBook).isEqualTo(em.find(Book.class, LONG_WALK_BOOK_ID)),
+                () -> assertThat(actualComment).get().extracting(Comment::getAuthorName).isEqualTo("testAuthorName"),
+                () -> assertThat(actualComment).get().extracting(Comment::getComment).isEqualTo("testComment"));
     }
 
     @Test
