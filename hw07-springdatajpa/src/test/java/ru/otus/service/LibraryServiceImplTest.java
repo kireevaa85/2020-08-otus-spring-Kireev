@@ -7,13 +7,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import ru.otus.dao.BookDao;
 import ru.otus.dao.CommentDao;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
 import ru.otus.repository.AuthorRepository;
+import ru.otus.repository.BookRepository;
 import ru.otus.repository.GenreRepository;
 
 import static org.mockito.Mockito.verify;
@@ -32,7 +32,7 @@ class LibraryServiceImplTest {
     @MockBean
     private GenreRepository genreRepository;
     @MockBean
-    private BookDao bookDao;
+    private BookRepository bookRepository;
     @MockBean
     private CommentDao commentDao;
 
@@ -57,7 +57,7 @@ class LibraryServiceImplTest {
     @DisplayName("корректно вызывать bookDao.count")
     void booksCount() {
         libraryService.booksCount();
-        verify(bookDao).count();
+        verify(bookRepository).count();
     }
 
     @Test
@@ -65,21 +65,21 @@ class LibraryServiceImplTest {
     void insertBook() {
         Book book = new Book(null, null, null, null);
         libraryService.insertBook(book);
-        verify(bookDao).save(book);
+        verify(bookRepository).save(book);
     }
 
     @Test
     @DisplayName("корректно вызывать bookDao.findById")
     void getBookById() {
         libraryService.getBookById(1L);
-        verify(bookDao).findById(1L);
+        verify(bookRepository).findById(1L);
     }
 
     @Test
     @DisplayName("корректно вызывать bookDao.findAll")
     void getAllBooks() {
         libraryService.getAllBooks();
-        verify(bookDao).findAll();
+        verify(bookRepository).findAll();
     }
 
     @Test
@@ -87,7 +87,7 @@ class LibraryServiceImplTest {
     void getAllBooksByAuthor() {
         Author author = new Author(null, null);
         libraryService.getAllBooksByAuthor(author);
-        verify(bookDao).findAllByAuthor(author);
+        verify(bookRepository).findAllByAuthor(author);
     }
 
     @Test
@@ -95,7 +95,7 @@ class LibraryServiceImplTest {
     void getAllBooksByGenre() {
         Genre genre = new Genre(null, null);
         libraryService.getAllBooksByGenre(genre);
-        verify(bookDao).findAllByGenre(genre);
+        verify(bookRepository).findAllByGenre(genre);
     }
 
     @Test
@@ -104,7 +104,7 @@ class LibraryServiceImplTest {
         Author author = new Author(null, null);
         Genre genre = new Genre(null, null);
         libraryService.getAllBooksByAuthorAndGenre(author, genre);
-        verify(bookDao).findAllByAuthorAndGenre(author, genre);
+        verify(bookRepository).findAllByAuthorAndGenre(author, genre);
     }
 
     @Test
@@ -113,14 +113,14 @@ class LibraryServiceImplTest {
         Author author = new Author(2L, null);
         Genre genre = new Genre(3L, null);
         libraryService.updateBookById(1L, "newName", author, genre);
-        verify(bookDao).updateById(1L, "newName", author, genre);
+        verify(bookRepository).updateById(1L, "newName", author, genre);
     }
 
     @Test
     @DisplayName("корректно вызывать bookDao.deleteById")
     void deleteBooksById() {
         libraryService.deleteBookById(1L);
-        verify(bookDao).deleteById(1L);
+        verify(bookRepository).deleteById(1L);
     }
 
     @Test
