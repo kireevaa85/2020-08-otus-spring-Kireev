@@ -1,11 +1,10 @@
-package ru.otus.dao;
+package ru.otus.repository;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
 
@@ -16,9 +15,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
-@Import(CommentDaoJpa.class)
-@DisplayName("Dao для работы с комментариями должно")
-class CommentDaoJpaTest {
+@DisplayName("Repository для работы с комментариями должно")
+class CommentRepositoryTest {
     private static final long EXPECTED_NEW_ID = 9;
     private static final long PETR1_LONG_WALK_COMMENT_ID = 4;
     private static final long LONG_WALK_BOOK_ID = 2;
@@ -29,7 +27,7 @@ class CommentDaoJpaTest {
     private TestEntityManager em;
 
     @Autowired
-    private CommentDaoJpa commentDaoJpa;
+    private CommentRepository commentRepository;
 
     @Test
     @DisplayName("добавлять комментарий в БД")
@@ -38,8 +36,8 @@ class CommentDaoJpaTest {
                 em.find(Book.class, 2L),
                 "Борис",
                 "Ну ничего себе рассказ, давайте еще");
-        Comment savedComment = commentDaoJpa.save(expectedComment);
-        Optional<Comment> actualComment = commentDaoJpa.findById(EXPECTED_NEW_ID);
+        Comment savedComment = commentRepository.save(expectedComment);
+        Optional<Comment> actualComment = commentRepository.findById(EXPECTED_NEW_ID);
         assertAll(() -> assertThat(savedComment.getId()).isEqualTo(EXPECTED_NEW_ID),
                 () -> assertThat(actualComment).isPresent().get()
                         .isEqualTo(expectedComment));
@@ -48,7 +46,7 @@ class CommentDaoJpaTest {
     @Test
     @DisplayName("возвращать ожидаемый комментарий по ее id")
     void findById() {
-        Optional<Comment> actualComment = commentDaoJpa.findById(PETR1_LONG_WALK_COMMENT_ID);
+        Optional<Comment> actualComment = commentRepository.findById(PETR1_LONG_WALK_COMMENT_ID);
         assertThat(actualComment).isPresent().get()
                 .hasFieldOrPropertyWithValue("id", PETR1_LONG_WALK_COMMENT_ID)
                 .hasFieldOrPropertyWithValue("book", em.find(Book.class, LONG_WALK_BOOK_ID))
@@ -59,7 +57,7 @@ class CommentDaoJpaTest {
     @Test
     @DisplayName("возвращать все комментарии по книге")
     void findAllByBook() {
-        List<Comment> actualComments = commentDaoJpa.findAllByBook(em.find(Book.class, KRISTINA_BOOK_ID));
+        List<Comment> actualComments = commentRepository.findAllByBook(em.find(Book.class, KRISTINA_BOOK_ID));
         assertAll(() -> assertThat(actualComments).hasSize(3),
                 () -> assertThat(actualComments.stream()).allMatch(c -> c.getBook().getId().equals(KRISTINA_BOOK_ID)));
     }
@@ -67,8 +65,8 @@ class CommentDaoJpaTest {
     @Test
     @DisplayName("обновляет данные комментария по id")
     void updateById() {
-        commentDaoJpa.updateById(PETR1_LONG_WALK_COMMENT_ID, "testAuthorName", "testComment");
-        Optional<Comment> actualComment = commentDaoJpa.findById(PETR1_LONG_WALK_COMMENT_ID);
+        commentRepository.updateById(PETR1_LONG_WALK_COMMENT_ID, "testAuthorName", "testComment");
+        Optional<Comment> actualComment = commentRepository.findById(PETR1_LONG_WALK_COMMENT_ID);
         assertAll(() -> assertThat(actualComment).get().extracting(Comment::getBook).isEqualTo(em.find(Book.class, LONG_WALK_BOOK_ID)),
                 () -> assertThat(actualComment).get().extracting(Comment::getAuthorName).isEqualTo("testAuthorName"),
                 () -> assertThat(actualComment).get().extracting(Comment::getComment).isEqualTo("testComment"));
@@ -77,9 +75,10 @@ class CommentDaoJpaTest {
     @Test
     @DisplayName("удаляет комментарий по id")
     void deleteById() {
-        commentDaoJpa.deleteById(PETR1_LONG_WALK_COMMENT_ID);
-        List<Comment> allComments = commentDaoJpa.findAllByBook(em.find(Book.class, LONG_WALK_BOOK_ID));
+        commentRepository.deleteById(PETR1_LONG_WALK_COMMENT_ID);
+        List<Comment> allComments = commentRepository.findAllByBook(em.find(Book.class, LONG_WALK_BOOK_ID));
         assertAll(() -> assertThat(allComments).hasSize(EXPECTED_COMMENTS_FOR_LONG_WALK_COUNT - 1),
                 () -> assertThat(allComments.stream()).noneMatch(c -> c.getId().equals(PETR1_LONG_WALK_COMMENT_ID)));
     }
+
 }
