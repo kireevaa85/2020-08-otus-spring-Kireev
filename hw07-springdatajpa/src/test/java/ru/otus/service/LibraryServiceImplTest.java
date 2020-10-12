@@ -7,14 +7,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import ru.otus.dao.AuthorDao;
 import ru.otus.dao.BookDao;
 import ru.otus.dao.CommentDao;
-import ru.otus.dao.GenreDao;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
+import ru.otus.repository.AuthorRepository;
+import ru.otus.repository.GenreRepository;
 
 import static org.mockito.Mockito.verify;
 
@@ -28,9 +28,9 @@ class LibraryServiceImplTest {
     }
 
     @MockBean
-    private AuthorDao authorDao;
+    private AuthorRepository authorRepository;
     @MockBean
-    private GenreDao genreDao;
+    private GenreRepository genreRepository;
     @MockBean
     private BookDao bookDao;
     @MockBean
@@ -40,17 +40,17 @@ class LibraryServiceImplTest {
     private LibraryService libraryService;
 
     @Test
-    @DisplayName("корректно вызывать authorDao")
+    @DisplayName("корректно вызывать authorRepository")
     void getAllAuthors() {
         libraryService.getAllAuthors();
-        verify(authorDao).findAll();
+        verify(authorRepository).findAll();
     }
 
     @Test
     @DisplayName("корректно вызывать genreDao")
     void getAllGenres() {
         libraryService.getAllGenres();
-        verify(genreDao).findAll();
+        verify(genreRepository).findAll();
     }
 
     @Test

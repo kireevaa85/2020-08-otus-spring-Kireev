@@ -3,14 +3,14 @@ package ru.otus.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.dao.AuthorDao;
 import ru.otus.dao.BookDao;
 import ru.otus.dao.CommentDao;
-import ru.otus.dao.GenreDao;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
+import ru.otus.repository.AuthorRepository;
+import ru.otus.repository.GenreRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,21 +18,21 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class LibraryServiceImpl implements LibraryService {
-    private final AuthorDao authorDao;
-    private final GenreDao genreDao;
+    private final AuthorRepository authorRepository;
+    private final GenreRepository genreRepository;
     private final BookDao bookDao;
     private final CommentDao commentDao;
 
     @Override
     @Transactional(readOnly = true)
     public List<Author> getAllAuthors() {
-        return authorDao.findAll();
+        return authorRepository.findAll();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Genre> getAllGenres() {
-        return genreDao.findAll();
+        return genreRepository.findAll();
     }
 
     @Override
