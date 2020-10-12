@@ -2,12 +2,29 @@ package ru.otus.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+import javax.persistence.*;
+
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "books")
 public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private final String name;
-    private final Author author;
-    private final Genre genre;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
+    private Author author;
+
+    @ManyToOne
+    @JoinColumn(name = "genre_id", nullable = false)
+    private Genre genre;
+
 }

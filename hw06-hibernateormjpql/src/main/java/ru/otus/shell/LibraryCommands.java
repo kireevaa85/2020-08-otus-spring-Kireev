@@ -6,10 +6,12 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
+import ru.otus.domain.Comment;
 import ru.otus.domain.Genre;
 import ru.otus.service.LibraryService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @ShellComponent
@@ -17,17 +19,19 @@ public class LibraryCommands {
     private final LibraryService libraryService;
 
     @ShellMethod(value = "Get all authors command", key = {"authors"})
-    public void authors() {
-        libraryService.getAllAuthors();
+    public String authors() {
+        List<Author> authors = libraryService.getAllAuthors();
+        return String.format("Все авторы библиотеки : %s", authors);
     }
 
     @ShellMethod(value = "Get all genres command", key = {"genres"})
-    public void genres() {
-        libraryService.getAllGenres();
+    public String genres() {
+        List<Genre> genres = libraryService.getAllGenres();
+        return String.format("Все жанры библиотеки : %s", genres);
     }
 
     @ShellMethod(value = "Get books count", key = {"booksCount"})
-    public int count() {
+    public long count() {
         return libraryService.booksCount();
     }
 
@@ -38,8 +42,8 @@ public class LibraryCommands {
 
     @ShellMethod(value = "Get books by id", key = {"bookById"})
     public String getBookById(@ShellOption Long bookId) {
-        Book book = libraryService.getBookById(bookId);
-        return String.format("Вы взяли книгу : %s", book);
+        Optional<Book> book = libraryService.getBookById(bookId);
+        return book.isPresent() ? String.format("Вы взяли книгу : %s", book.get()) : String.format("Книги с id: %d не существует", bookId);
     }
 
     @ShellMethod(value = "Get all books", key = {"allBooks"})
@@ -75,6 +79,28 @@ public class LibraryCommands {
 
     @ShellMethod(value = "Delete book by id", key = {"deleteBookById"})
     public void deleteBooksById(@ShellOption Long bookId) {
-        libraryService.deleteBooksById(bookId);
+        libraryService.deleteBookById(bookId);
     }
+
+    @ShellMethod(value = "Insert comment command", key = {"insertComment"})
+    public void insertComment(@ShellOption Long bookId, @ShellOption String authorName, @ShellOption String comment) {
+        libraryService.insertComment(new Comment(null, new Book(bookId, null, null, null), authorName, comment));
+    }
+
+    @ShellMethod(value = "Get comments by book id", key = {"commentsByBookId"})
+    public String getAllCommentsByBookId(@ShellOption Long bookId) {
+        List<Comment> allCommentsByBook = libraryService.getAllCommentsByBook(new Book(bookId, null, null, null));
+        return String.format("Вы взяли следующие комментарии по книге : %s", allCommentsByBook);
+    }
+
+    @ShellMethod(value = "Update comment by id", key = {"updateComment"})
+    public void updateCommentById(@ShellOption Long id, @ShellOption String authorName, @ShellOption String comment) {
+        libraryService.updateCommentById(id, authorName, comment);
+    }
+
+    @ShellMethod(value = "Delete comment by id", key = {"deleteCommentById"})
+    public void deleteCommentById(@ShellOption Long commentId) {
+        libraryService.deleteCommentById(commentId);
+    }
+
 }
