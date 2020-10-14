@@ -14,6 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "books")
+@NamedEntityGraph(name = "Book.allAttributes", includeAllAttributes = true)
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

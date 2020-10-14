@@ -41,7 +41,7 @@ class BookRepositoryTest {
 
     @Test
     @DisplayName("добавлять книгу в БД")
-    void save() {
+    void savePersist() {
         Book expectedBook = new Book(null,
                 "Spring in Action",
                 em.find(Author.class, 2L),
@@ -51,6 +51,20 @@ class BookRepositoryTest {
         assertAll(() -> assertThat(savedBook.getId()).isEqualTo(EXPECTED_NEW_ID),
                 () -> assertThat(actualBook).isPresent().get()
                         .isEqualTo(expectedBook));
+    }
+
+    @Test
+    @DisplayName("обновляет данные книги в БД")
+    void saveMerge() {
+        Book longWalkBook = em.find(Book.class, LONG_WALK_ID);
+        longWalkBook.setName("testName");
+        longWalkBook.setAuthor(new Author(3L, null));
+        longWalkBook.setGenre(new Genre(2L, null));
+        bookRepository.save(longWalkBook);
+        Optional<Book> actualBook = bookRepository.findById(LONG_WALK_ID);
+        assertAll(() -> assertThat(actualBook).get().extracting(Book::getName).isEqualTo("testName"),
+                () -> assertThat(actualBook).get().extracting(Book::getAuthor).extracting(Author::getId).isEqualTo(3L),
+                () -> assertThat(actualBook).get().extracting(Book::getGenre).extracting(Genre::getId).isEqualTo(2L));
     }
 
     @Test
@@ -92,16 +106,6 @@ class BookRepositoryTest {
         assertAll(() -> assertThat(actualBooks).hasSize(2),
                 () -> assertThat(actualBooks.stream()).allMatch(book -> book.getAuthor().getId().equals(KING_ID)
                         && book.getGenre().getId().equals(HORROR_ID)));
-    }
-
-    @Test
-    @DisplayName("обновляет данные книги по id")
-    void updateById() {
-        bookRepository.updateById(LONG_WALK_ID, "testName", new Author(3L, null), new Genre(2L, null));
-        Optional<Book> actualBook = bookRepository.findById(LONG_WALK_ID);
-        assertAll(() -> assertThat(actualBook).get().extracting(Book::getName).isEqualTo("testName"),
-                () -> assertThat(actualBook).get().extracting(Book::getAuthor).extracting(Author::getId).isEqualTo(3L),
-                () -> assertThat(actualBook).get().extracting(Book::getGenre).extracting(Genre::getId).isEqualTo(2L));
     }
 
     @Test

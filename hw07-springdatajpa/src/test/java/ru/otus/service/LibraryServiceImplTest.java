@@ -113,7 +113,8 @@ class LibraryServiceImplTest {
         Author author = new Author(2L, null);
         Genre genre = new Genre(3L, null);
         libraryService.updateBookById(1L, "newName", author, genre);
-        verify(bookRepository).updateById(1L, "newName", author, genre);
+        verify(bookRepository).findById(1L);
+        //verify(bookRepository).save(new Book(1L, "newName", author, genre));
     }
 
     @Test

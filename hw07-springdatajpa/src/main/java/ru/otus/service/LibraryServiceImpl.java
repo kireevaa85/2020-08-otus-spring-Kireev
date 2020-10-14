@@ -80,7 +80,13 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     @Transactional
     public void updateBookById(Long id, String name, Author author, Genre genre) {
-        bookRepository.updateById(id, name, author, genre);
+        Optional<Book> bookById = bookRepository.findById(id);
+        bookById.ifPresent(book -> {
+            book.setName(name);
+            book.setAuthor(author);
+            book.setGenre(genre);
+            bookRepository.save(book);
+        });
     }
 
     @Override
