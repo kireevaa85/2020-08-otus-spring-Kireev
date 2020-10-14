@@ -14,7 +14,7 @@ public interface LibraryService {
 
     List<Genre> getAllGenres();
 
-    Long booksCount();
+    long booksCount();
 
     Book insertBook(Book book);
 
