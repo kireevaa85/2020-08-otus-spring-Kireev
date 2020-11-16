@@ -3,6 +3,7 @@ package ru.otus.repository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.mongodb.core.MongoOperations;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Genre;
@@ -12,12 +13,17 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static org.springframework.data.mongodb.core.query.Query.query;
 
 @DataMongoTest
 @DisplayName("Repository для работы с книгами должно")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BookRepositoryTest {
     private static final int EXPECTED_BOOKS_COUNT = 5;
+
+    @Autowired
+    private MongoOperations mongoOperations;
 
     @Autowired
     private BookRepository bookRepository;
@@ -33,18 +39,18 @@ class BookRepositoryTest {
     @Order(Integer.MAX_VALUE)
     @DisplayName("обновляет данные книги в БД")
     void saveMerge() {
-        Book longWalkBook = bookRepository.findAll().get(1);
+        Book longWalkBook = mongoOperations.findOne(query(where("name").is("Long walk")), Book.class);
         String longWalkId = longWalkBook.getId();
         longWalkBook.setName("testName");
-        Author pushkinAuthor = bookRepository.findAll().get(3).getAuthor();
-        Genre comedyGenre = bookRepository.findAll().get(3).getGenre();
+        Author pushkinAuthor = mongoOperations.findOne(query(where("name").is("Pushkin")), Author.class);
+        Genre comedyGenre = mongoOperations.findOne(query(where("name").is("Comedy")), Genre.class);
         longWalkBook.setAuthor(pushkinAuthor);
         longWalkBook.setGenre(comedyGenre);
         bookRepository.save(longWalkBook);
-        Optional<Book> actualBook = bookRepository.findById(longWalkId);
-        assertAll(() -> assertThat(actualBook).get().extracting(Book::getName).isEqualTo("testName"),
-                () -> assertThat(actualBook).get().extracting(Book::getAuthor).extracting(Author::getId).isEqualTo(pushkinAuthor.getId()),
-                () -> assertThat(actualBook).get().extracting(Book::getGenre).extracting(Genre::getId).isEqualTo(comedyGenre.getId()));
+        Book actualBook = mongoOperations.findOne(query(where("id").is(longWalkId)), Book.class);
+        assertAll(() -> assertThat(actualBook).extracting(Book::getName).isEqualTo("testName"),
+                () -> assertThat(actualBook).extracting(Book::getAuthor).extracting(Author::getId).isEqualTo(pushkinAuthor.getId()),
+                () -> assertThat(actualBook).extracting(Book::getGenre).extracting(Genre::getId).isEqualTo(comedyGenre.getId()));
     }
 
     @Test
@@ -53,8 +59,8 @@ class BookRepositoryTest {
     void savePersist() {
         Book expectedBook = new Book(null,
                 "Spring in Action",
-                bookRepository.findAll().get(0).getAuthor(),
-                bookRepository.findAll().get(0).getGenre());
+                mongoOperations.findOne(query(where("name").is("King")), Author.class),
+                mongoOperations.findOne(query(where("name").is("Horror")), Genre.class));
         Book savedBook = bookRepository.save(expectedBook);
         assertThat(expectedBook.equals(savedBook));
     }
@@ -62,7 +68,7 @@ class BookRepositoryTest {
     @Test
     @DisplayName("возвращать ожидаемую книгу по ее id")
     void findById() {
-        Book expectedBook = bookRepository.findAll().get(0);
+        Book expectedBook = mongoOperations.findOne(query(where("name").is("Kristina")), Book.class);
         String expectedBookId = expectedBook.getId();
         Optional<Book> actualBook = bookRepository.findById(expectedBookId);
         assertThat(actualBook).isPresent().get()
@@ -80,7 +86,7 @@ class BookRepositoryTest {
     @Test
     @DisplayName("возвращать все книги по автору")
     void findAllByAuthor() {
-        String pushkinId = bookRepository.findAll().get(3).getAuthor().getId();
+        String pushkinId = mongoOperations.findOne(query(where("name").is("Pushkin")), Author.class).getId();
         List<Book> actualBooks = bookRepository.findAllByAuthor_Id(pushkinId);
         assertAll(() -> assertThat(actualBooks).hasSize(2),
                 () -> assertThat(actualBooks.stream()).allMatch(book -> book.getAuthor().getId().equals(pushkinId)));
@@ -89,7 +95,7 @@ class BookRepositoryTest {
     @Test
     @DisplayName("возвращать все книги по жанру")
     void findAllByGenre() {
-        String horrorId = bookRepository.findAll().get(0).getGenre().getId();
+        String horrorId = mongoOperations.findOne(query(where("name").is("Horror")), Genre.class).getId();
         List<Book> actualBooks = bookRepository.findAllByGenre_Id(horrorId);
         assertAll(() -> assertThat(actualBooks).hasSize(2),
                 () -> assertThat(actualBooks.stream()).allMatch(book -> book.getGenre().getId().equals(horrorId)));
@@ -98,8 +104,8 @@ class BookRepositoryTest {
     @Test
     @DisplayName("возвращать все книги по автору и жанру")
     void findAllByAuthorAndGenre() {
-        String kingId = bookRepository.findAll().get(0).getAuthor().getId();
-        String horrorId = bookRepository.findAll().get(0).getGenre().getId();
+        String kingId = mongoOperations.findOne(query(where("name").is("King")), Author.class).getId();
+        String horrorId = mongoOperations.findOne(query(where("name").is("Horror")), Genre.class).getId();
         List<Book> actualBooks = bookRepository.findAllByAuthor_IdAndGenre_Id(kingId, horrorId);
         assertAll(() -> assertThat(actualBooks).hasSize(2),
                 () -> assertThat(actualBooks.stream()).allMatch(book -> book.getAuthor().getId().equals(kingId)
@@ -109,11 +115,11 @@ class BookRepositoryTest {
     @Test
     @DisplayName("удаляет книгу по id")
     void deleteById() {
-        String longWalkId = bookRepository.findAll().get(1).getId();
-        bookRepository.deleteById(longWalkId);
-        List<Book> allBooks = bookRepository.findAll();
+        String ruslanAndLudmilaId = mongoOperations.findOne(query(where("name").is("Ruslan and Ludmila")), Book.class).getId();
+        bookRepository.deleteById(ruslanAndLudmilaId);
+        List<Book> allBooks = mongoOperations.findAll(Book.class);
         assertAll(() -> assertThat(allBooks).hasSize(EXPECTED_BOOKS_COUNT - 1),
-                () -> assertThat(allBooks.stream()).noneMatch(book -> book.getId().equals(longWalkId)));
+                () -> assertThat(allBooks.stream()).noneMatch(book -> book.getId().equals(ruslanAndLudmilaId)));
     }
 
 }

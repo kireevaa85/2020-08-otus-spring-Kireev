@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.shell.Shell;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
@@ -25,7 +26,11 @@ class LibraryCommandsTest {
     private LibraryService libraryService;
 
     private static final String COMMAND_AUTHORS = "authors";
+    private static final String COMMAND_INSERT_AUTHOR = "insertAuthor";
+    private static final String COMMAND_DELETE_AUTHOR_BY_ID = "deleteAuthorById";
     private static final String COMMAND_GENRES = "genres";
+    private static final String COMMAND_INSERT_GENRE = "insertGenre";
+    private static final String COMMAND_DELETE_GENRE_BY_ID = "deleteGenreById";
     private static final String COMMAND_BOOKS_COUNT = "booksCount";
     private static final String COMMAND_INSERT_BOOK = "insertBook";
     private static final String COMMAND_BOOK_BY_ID = "bookById";
@@ -48,10 +53,38 @@ class LibraryCommandsTest {
     }
 
     @Test
+    @DisplayName("корректно вызывает libraryService.saveAuthor")
+    void insertAuthor() {
+        shell.evaluate(() -> COMMAND_INSERT_AUTHOR + " xxx");
+        verify(libraryService).saveAuthor(new Author(null, "xxx"));
+    }
+
+    @Test
+    @DisplayName("корректно вызывает libraryService.deleteAuthorById")
+    void deleteAuthorById() {
+        shell.evaluate(() -> COMMAND_DELETE_AUTHOR_BY_ID + " 1");
+        verify(libraryService).deleteAuthorById("1");
+    }
+
+    @Test
     @DisplayName("корректно вызывает libraryService.getAllGenres")
     void genres() {
         shell.evaluate(() -> COMMAND_GENRES);
         verify(libraryService).getAllGenres();
+    }
+
+    @Test
+    @DisplayName("корректно вызывает libraryService.saveGenre")
+    void insertGenre() {
+        shell.evaluate(() -> COMMAND_INSERT_GENRE + " xxx");
+        verify(libraryService).saveGenre(new Genre(null, "xxx"));
+    }
+
+    @Test
+    @DisplayName("корректно вызывает libraryService.deleteGenreById")
+    void deleteGenreById() {
+        shell.evaluate(() -> COMMAND_DELETE_GENRE_BY_ID + " 1");
+        verify(libraryService).deleteGenreById("1");
     }
 
     @Test
@@ -62,10 +95,10 @@ class LibraryCommandsTest {
     }
 
     @Test
-    @DisplayName("корректно вызывает libraryService.insertBook")
+    @DisplayName("корректно вызывает libraryService.saveBook")
     void insertBook() {
-        shell.evaluate(() -> COMMAND_INSERT_BOOK + " bookName 1 1");
-        verify(libraryService).insertBook(new Book(null, "bookName", new Author("1", null), new Genre("1", null)));
+        shell.evaluate(() -> COMMAND_INSERT_BOOK + " bookName 1 a1 1 g1");
+        verify(libraryService).saveBook(new Book(null, "bookName", new Author("1", "a1"), new Genre("1", "g1")));
     }
 
     @Test
@@ -104,24 +137,24 @@ class LibraryCommandsTest {
     }
 
     @Test
-    @DisplayName("корректно вызывает libraryService.updateBookById")
-    void updateBookById() {
-        shell.evaluate(() -> COMMAND_UPDATE_BOOK + " 1 bookName 2 3");
-        verify(libraryService).updateBookById("1", "bookName", new Author("2", null), new Genre("3", null));
+    @DisplayName("корректно вызывает libraryService.saveBook")
+    void updateBook() {
+        shell.evaluate(() -> COMMAND_UPDATE_BOOK + " 1 bookName 2 2a 3 3g");
+        verify(libraryService).saveBook(new Book("1", "bookName", new Author("2", "2a"), new Genre("3", "3g")));
     }
 
     @Test
     @DisplayName("корректно вызывает libraryService.deleteBookById")
-    void deleteBooksById() {
+    void deleteBookById() {
         shell.evaluate(() -> COMMAND_DELETE_BOOK_BY_ID + " 1");
         verify(libraryService).deleteBookById("1");
     }
 
     @Test
-    @DisplayName("корректно вызывает libraryService.insertComment")
+    @DisplayName("корректно вызывает libraryService.saveComment")
     void insertComment() {
         shell.evaluate(() -> COMMAND_INSERT_COMMENT + " 1 authorName comment");
-        verify(libraryService).insertComment(new Comment(null, "authorName", "comment", new Book("1", null, null, null)));
+        verify(libraryService).saveComment(new Comment(null, "authorName", "comment", new Book("1", null, null, null)));
     }
 
     @Test

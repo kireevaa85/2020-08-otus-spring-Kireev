@@ -12,11 +12,19 @@ public interface LibraryService {
 
     List<Author> getAllAuthors();
 
+    Author saveAuthor(Author author);
+
+    void deleteAuthorById(String id);
+
     List<Genre> getAllGenres();
+
+    Genre saveGenre(Genre genre);
+
+    void deleteGenreById(String id);
 
     long booksCount();
 
-    Book insertBook(Book book);
+    Book saveBook(Book book);
 
     Optional<Book> getBookById(String id);
 
@@ -28,11 +36,9 @@ public interface LibraryService {
 
     List<Book> getAllBooksByAuthorAndGenre(Author author, Genre genre);
 
-    void updateBookById(String id, String name, Author author, Genre genre);
-
     void deleteBookById(String id);
 
-    Comment insertComment(Comment comment);
+    Comment saveComment(Comment comment);
 
     Optional<Comment> getCommentById(String id);
 

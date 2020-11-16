@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.mongodb.core.MongoOperations;
 import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
 
@@ -12,14 +13,18 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static org.springframework.data.mongodb.core.query.Query.query;
 
 @DataMongoTest
 @DisplayName("Repository для работы с комментариями должно")
 class CommentRepositoryTest {
+
+    @Autowired
+    private MongoOperations mongoOperations;
+
     @Autowired
     private CommentRepository commentRepository;
-    @Autowired
-    private BookRepository bookRepository;
 
     @Test
     @DisplayName("добавлять комментарий в БД")
@@ -27,7 +32,7 @@ class CommentRepositoryTest {
         Comment expectedComment = new Comment(null,
                 "Борис",
                 "Ну ничего себе рассказ, давайте еще",
-                bookRepository.findAll().get(1));
+                mongoOperations.findOne(query(where("name").is("Long walk")), Book.class));
         Comment savedComment = commentRepository.save(expectedComment);
         assertThat(expectedComment.equals(savedComment));
     }
@@ -35,7 +40,7 @@ class CommentRepositoryTest {
     @Test
     @DisplayName("возвращать ожидаемый комментарий по ее id")
     void findById() {
-        Comment petr1LongWalkComment = commentRepository.findAll().get(3);
+        Comment petr1LongWalkComment = mongoOperations.findOne(query(where("comment").is("Ничего не понял, но очень интересно")), Comment.class);
         String petr1LongWalkCommentId = petr1LongWalkComment.getId();
         Optional<Comment> actualComment = commentRepository.findById(petr1LongWalkCommentId);
         assertThat(actualComment).isPresent().get()
@@ -48,7 +53,7 @@ class CommentRepositoryTest {
     @Test
     @DisplayName("возвращать все комментарии по книге")
     void findAllByBook() {
-        Book kristinaBook = bookRepository.findAll().get(0);
+        Book kristinaBook = mongoOperations.findOne(query(where("name").is("Kristina")), Book.class);
         String kristinaBookId = kristinaBook.getId();
         List<Comment> actualComments = commentRepository.findAllByBook_Id(kristinaBookId);
         assertAll(() -> assertThat(actualComments).hasSize(3),
@@ -58,13 +63,13 @@ class CommentRepositoryTest {
     @Test
     @DisplayName("обновляет данные комментария по id")
     void updateById() {
-        Comment petr1LongWalkComment = commentRepository.findAll().get(3);
+        Comment petr1LongWalkComment = mongoOperations.findOne(query(where("comment").is("Ничего не понял, но очень интересно")), Comment.class);
         String petr1LongWalkCommentId = petr1LongWalkComment.getId();
         commentRepository.updateById(petr1LongWalkCommentId, "testAuthorName", "testComment");
-        Optional<Comment> actualComment = commentRepository.findById(petr1LongWalkCommentId);
-        assertAll(() -> assertThat(actualComment).get().extracting(Comment::getBook).isEqualTo(petr1LongWalkComment.getBook()),
-                () -> assertThat(actualComment).get().extracting(Comment::getAuthorName).isEqualTo("testAuthorName"),
-                () -> assertThat(actualComment).get().extracting(Comment::getComment).isEqualTo("testComment"));
+        Comment actualComment = mongoOperations.findOne(query(where("id").is(petr1LongWalkCommentId)), Comment.class);
+        assertAll(() -> assertThat(actualComment).extracting(Comment::getBook).isEqualTo(petr1LongWalkComment.getBook()),
+                () -> assertThat(actualComment).extracting(Comment::getAuthorName).isEqualTo("testAuthorName"),
+                () -> assertThat(actualComment).extracting(Comment::getComment).isEqualTo("testComment"));
     }
 
 }

@@ -24,10 +24,30 @@ public class LibraryCommands {
         return String.format("Все авторы библиотеки : %s", authors);
     }
 
+    @ShellMethod(value = "Insert author command", key = {"insertAuthor"})
+    public void insertAuthor(@ShellOption String authorName) {
+        libraryService.saveAuthor(new Author(null, authorName));
+    }
+
+    @ShellMethod(value = "Delete author by id", key = {"deleteAuthorById"})
+    public void deleteAuthorById(@ShellOption String authorId) {
+        libraryService.deleteAuthorById(authorId);
+    }
+
     @ShellMethod(value = "Get all genres command", key = {"genres"})
     public String genres() {
         List<Genre> genres = libraryService.getAllGenres();
         return String.format("Все жанры библиотеки : %s", genres);
+    }
+
+    @ShellMethod(value = "Insert genre command", key = {"insertGenre"})
+    public void insertGenre(@ShellOption String genreName) {
+        libraryService.saveGenre(new Genre(null, genreName));
+    }
+
+    @ShellMethod(value = "Delete genre by id", key = {"deleteGenreById"})
+    public void deleteGenreById(@ShellOption String genreId) {
+        libraryService.deleteGenreById(genreId);
     }
 
     @ShellMethod(value = "Get books count", key = {"booksCount"})
@@ -36,8 +56,10 @@ public class LibraryCommands {
     }
 
     @ShellMethod(value = "Insert book command", key = {"insertBook"})
-    public void insertBook(@ShellOption String bookName, @ShellOption String authorId, @ShellOption String genreId) {
-        libraryService.insertBook(new Book(null, bookName, new Author(authorId, null), new Genre(genreId, null)));
+    public void insertBook(@ShellOption String bookName,
+                           @ShellOption String authorId, @ShellOption String authorName,
+                           @ShellOption String genreId, @ShellOption String genreName) {
+        libraryService.saveBook(new Book(null, bookName, new Author(authorId, authorName), new Genre(genreId, genreName)));
     }
 
     @ShellMethod(value = "Get books by id", key = {"bookById"})
@@ -72,19 +94,24 @@ public class LibraryCommands {
         return String.format("Вы взяли следующие книги по автору и жанру : %s", allBooksByAuthorAndGenre);
     }
 
-    @ShellMethod(value = "Update book by id", key = {"updateBook"})
-    public void updateBookById(@ShellOption String id, @ShellOption String bookName, @ShellOption String authorId, @ShellOption String genreId) {
-        libraryService.updateBookById(id, bookName, new Author(authorId, null), new Genre(genreId, null));
+    @ShellMethod(value = "Update book", key = {"updateBook"})
+    public void updateBook(@ShellOption String id,
+                           @ShellOption String bookName,
+                           @ShellOption String authorId,
+                           @ShellOption String authorName,
+                           @ShellOption String genreId,
+                           @ShellOption String genreName) {
+        libraryService.saveBook(new Book(id, bookName, new Author(authorId, authorName), new Genre(genreId, genreName)));
     }
 
     @ShellMethod(value = "Delete book by id", key = {"deleteBookById"})
-    public void deleteBooksById(@ShellOption String bookId) {
+    public void deleteBookById(@ShellOption String bookId) {
         libraryService.deleteBookById(bookId);
     }
 
     @ShellMethod(value = "Insert comment command", key = {"insertComment"})
     public void insertComment(@ShellOption String bookId, @ShellOption String authorName, @ShellOption String comment) {
-        libraryService.insertComment(new Comment(null, authorName, comment, new Book(bookId, null, null, null)));
+        libraryService.saveComment(new Comment(null, authorName, comment, new Book(bookId, null, null, null)));
     }
 
     @ShellMethod(value = "Get comments by book id", key = {"commentsByBookId"})

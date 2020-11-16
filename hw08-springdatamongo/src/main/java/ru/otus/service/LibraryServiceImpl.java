@@ -30,9 +30,33 @@ public class LibraryServiceImpl implements LibraryService {
     }
 
     @Override
+    @Transactional
+    public Author saveAuthor(Author author) {
+        return authorRepository.save(author);
+    }
+
+    @Override
+    @Transactional
+    public void deleteAuthorById(String id) {
+        authorRepository.deleteById(id);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Genre> getAllGenres() {
         return genreRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public Genre saveGenre(Genre genre) {
+        return genreRepository.save(genre);
+    }
+
+    @Override
+    @Transactional
+    public void deleteGenreById(String id) {
+        genreRepository.deleteById(id);
     }
 
     @Override
@@ -43,11 +67,7 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     @Transactional
-    public Book insertBook(Book book) {
-        Optional<Author> authorById = authorRepository.findById(book.getAuthor().getId());
-        Optional<Genre> genreById = genreRepository.findById(book.getGenre().getId());
-        authorById.ifPresent(book::setAuthor);
-        genreById.ifPresent(book::setGenre);
+    public Book saveBook(Book book) {
         return bookRepository.save(book);
     }
 
@@ -83,27 +103,13 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     @Transactional
-    public void updateBookById(String id, String name, Author author, Genre genre) {
-        Optional<Author> authorById = authorRepository.findById(author.getId());
-        Optional<Genre> genreById = genreRepository.findById(genre.getId());
-        Optional<Book> bookById = bookRepository.findById(id);
-        bookById.ifPresent(book -> {
-            book.setName(name);
-            authorById.ifPresentOrElse(book::setAuthor, () -> book.setAuthor(author));
-            genreById.ifPresentOrElse(book::setGenre, () -> book.setGenre(genre));
-            bookRepository.save(book);
-        });
-    }
-
-    @Override
-    @Transactional
     public void deleteBookById(String id) {
         bookRepository.deleteById(id);
     }
 
     @Override
     @Transactional
-    public Comment insertComment(Comment comment) {
+    public Comment saveComment(Comment comment) {
         return commentRepository.save(comment);
     }
 
