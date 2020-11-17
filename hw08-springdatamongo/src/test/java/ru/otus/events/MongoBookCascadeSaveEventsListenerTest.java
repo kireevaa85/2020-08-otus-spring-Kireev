@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Genre;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @DisplayName("Сохранение нового автора и жанра вместе с книгой")
 @DataMongoTest
 @ComponentScan({"ru.otus.repository", "ru.otus.events"})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class MongoBookCascadeSaveEventsListenerTest {
 
     @Autowired

@@ -9,4 +9,6 @@ public interface CommentRepository extends MongoRepository<Comment, String>, Com
 
     List<Comment> findAllByBook_Id(String bookId);
 
+    void deleteAllByBook_Id(String bookId);
+
 }

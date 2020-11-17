@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.domain.Author;
 import ru.otus.domain.Genre;
 import ru.otus.repository.GenreRepository;
@@ -18,6 +19,7 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @DisplayName("Удаление жанра при наличии/отсутствии с ним книг")
 @DataMongoTest
 @ComponentScan({"ru.otus.repository", "ru.otus.events"})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class MongoGenreDeleteEventsListenerTest {
 
     @Autowired

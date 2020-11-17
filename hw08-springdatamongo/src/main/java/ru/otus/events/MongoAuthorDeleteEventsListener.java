@@ -18,7 +18,7 @@ public class MongoAuthorDeleteEventsListener extends AbstractMongoEventListener<
         super.onBeforeDelete(event);
         val source = event.getSource();
         val id = source.get("_id").toString();
-        if (bookRepository.findAllByAuthor_Id(id).size() > 0) {
+        if (bookRepository.existsByAuthor_Id(id)) {
             throw new RuntimeException("Нельзя удалить автора с id=" + id + ", пока существуют с ним книги в библиотеке");
         }
     }

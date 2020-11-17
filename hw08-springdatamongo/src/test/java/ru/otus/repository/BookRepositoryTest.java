@@ -4,6 +4,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.domain.Author;
 import ru.otus.domain.Book;
 import ru.otus.domain.Genre;
@@ -38,6 +39,7 @@ class BookRepositoryTest {
     @Test
     @Order(Integer.MAX_VALUE)
     @DisplayName("обновляет данные книги в БД")
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void saveMerge() {
         Book longWalkBook = mongoOperations.findOne(query(where("name").is("Long walk")), Book.class);
         String longWalkId = longWalkBook.getId();
@@ -56,6 +58,7 @@ class BookRepositoryTest {
     @Test
     @Order(Integer.MAX_VALUE - 1)
     @DisplayName("добавлять книгу в БД")
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void savePersist() {
         Book expectedBook = new Book(null,
                 "Spring in Action",
@@ -93,12 +96,32 @@ class BookRepositoryTest {
     }
 
     @Test
+    @DisplayName("возвращать true если существует книга по автору или наоборот")
+    void existsByAuthor() {
+        String pushkinId = mongoOperations.findOne(query(where("name").is("Pushkin")), Author.class).getId();
+        boolean bookExists = bookRepository.existsByAuthor_Id(pushkinId);
+        boolean bookNotExists = bookRepository.existsByAuthor_Id("lalalala");
+        assertAll(() -> assertThat(bookExists).isTrue(),
+                () -> assertThat(bookNotExists).isFalse());
+    }
+
+    @Test
     @DisplayName("возвращать все книги по жанру")
     void findAllByGenre() {
         String horrorId = mongoOperations.findOne(query(where("name").is("Horror")), Genre.class).getId();
         List<Book> actualBooks = bookRepository.findAllByGenre_Id(horrorId);
         assertAll(() -> assertThat(actualBooks).hasSize(2),
                 () -> assertThat(actualBooks.stream()).allMatch(book -> book.getGenre().getId().equals(horrorId)));
+    }
+
+    @Test
+    @DisplayName("возвращать true если существует книга по жанру или наоборот")
+    void existsByGenre() {
+        String horrorId = mongoOperations.findOne(query(where("name").is("Horror")), Genre.class).getId();
+        boolean bookExists = bookRepository.existsByGenre_Id(horrorId);
+        boolean bookNotExists = bookRepository.existsByGenre_Id("lalalala");
+        assertAll(() -> assertThat(bookExists).isTrue(),
+                () -> assertThat(bookNotExists).isFalse());
     }
 
     @Test
@@ -114,6 +137,7 @@ class BookRepositoryTest {
 
     @Test
     @DisplayName("удаляет книгу по id")
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void deleteById() {
         String ruslanAndLudmilaId = mongoOperations.findOne(query(where("name").is("Ruslan and Ludmila")), Book.class).getId();
         bookRepository.deleteById(ruslanAndLudmilaId);

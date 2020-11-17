@@ -18,7 +18,7 @@ public class MongoGenreDeleteEventsListener extends AbstractMongoEventListener<G
         super.onBeforeDelete(event);
         val source = event.getSource();
         val id = source.get("_id").toString();
-        if (bookRepository.findAllByGenre_Id(id).size() > 0) {
+        if (bookRepository.existsByGenre_Id(id)) {
             throw new RuntimeException("Нельзя удалить жанр с id=" + id + ", пока существуют с ним книги в библиотеке");
         }
     }

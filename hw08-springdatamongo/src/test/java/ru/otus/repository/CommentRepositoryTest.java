@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.otus.domain.Book;
 import ru.otus.domain.Comment;
 
@@ -28,6 +29,7 @@ class CommentRepositoryTest {
 
     @Test
     @DisplayName("добавлять комментарий в БД")
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void save() {
         Comment expectedComment = new Comment(null,
                 "Борис",
@@ -61,7 +63,19 @@ class CommentRepositoryTest {
     }
 
     @Test
+    @DisplayName("удалять все комментарии по книге")
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    void deleteAllByBook() {
+        Book kristinaBook = mongoOperations.findOne(query(where("name").is("Kristina")), Book.class);
+        String kristinaBookId = kristinaBook.getId();
+        commentRepository.deleteAllByBook_Id(kristinaBookId);
+        List<Comment> actualComments = mongoOperations.find(query(where("book.id").is(kristinaBookId)), Comment.class);
+        assertThat(actualComments).isEmpty();
+    }
+
+    @Test
     @DisplayName("обновляет данные комментария по id")
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void updateById() {
         Comment petr1LongWalkComment = mongoOperations.findOne(query(where("comment").is("Ничего не понял, но очень интересно")), Comment.class);
         String petr1LongWalkCommentId = petr1LongWalkComment.getId();

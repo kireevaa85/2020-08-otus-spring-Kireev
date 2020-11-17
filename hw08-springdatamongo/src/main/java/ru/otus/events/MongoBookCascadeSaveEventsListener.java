@@ -20,15 +20,15 @@ public class MongoBookCascadeSaveEventsListener extends AbstractMongoEventListen
     @Override
     public void onBeforeConvert(BeforeConvertEvent<Book> event) {
         super.onBeforeConvert(event);
-        val student = event.getSource();
-        if (student.getAuthor() != null) {
-            if (Objects.isNull(student.getAuthor().getId())) {
-                authorRepository.save(student.getAuthor());
+        val book = event.getSource();
+        if (book.getAuthor() != null) {
+            if (Objects.isNull(book.getAuthor().getId())) {
+                authorRepository.save(book.getAuthor());
             }
         }
-        if (student.getGenre() != null) {
-            if (Objects.isNull(student.getGenre().getId())) {
-                genreRepository.save(student.getGenre());
+        if (book.getGenre() != null) {
+            if (Objects.isNull(book.getGenre().getId())) {
+                genreRepository.save(book.getGenre());
             }
         }
     }
