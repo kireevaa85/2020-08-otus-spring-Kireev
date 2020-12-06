@@ -10,15 +10,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.otus.NotFoundException;
-import ru.otus.domain.Author;
 import ru.otus.domain.Book;
-import ru.otus.domain.Comment;
 import ru.otus.dto.BookDto;
 import ru.otus.mapper.Mapper;
 import ru.otus.service.LibraryService;
-
-import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
@@ -45,14 +40,14 @@ public class BookController {
         return "book";
     }
 
-    @GetMapping("/deleteBook")
-    public String deleteBook(@RequestParam("id") String id, Model model) {
+    @PostMapping("/deleteBook")
+    public String deleteBook(String id) {
         libraryService.deleteBookById(id);
         return "redirect:/";
     }
 
     @PostMapping("/book")
-    public String saveBook(String id, String name, String authorId, String genreId, Model model) throws NotFoundException {
+    public String saveBook(String id, String name, String authorId, String genreId) throws NotFoundException {
         Book book = new Book()
                 .setId(id)
                 .setName(name)
@@ -64,7 +59,7 @@ public class BookController {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> handleNotFound(NotFoundException e) {
-        return ResponseEntity.badRequest().body("Not found");
+        return ResponseEntity.badRequest().body("Not found. " + e.getMessage());
     }
 
 }

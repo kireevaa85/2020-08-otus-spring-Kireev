@@ -56,7 +56,7 @@
     </div>
 </form>
 
-<table class="comments" th:if="${book?.id} != null and ${book?.id} != ''">
+<table class="comments" th:if="${book?.id} != null and ${book?.id} != '' and ${!comments.isEmpty()}">
     <thead>
     <tr>
         <th>Author</th>

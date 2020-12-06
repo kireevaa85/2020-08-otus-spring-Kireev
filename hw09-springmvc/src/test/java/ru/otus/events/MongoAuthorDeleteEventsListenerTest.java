@@ -18,7 +18,6 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @DisplayName("Удаление автора при наличии/отсутствии с ним книг")
 @DataMongoTest
 @ComponentScan({"ru.otus.repository", "ru.otus.events"})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class MongoAuthorDeleteEventsListenerTest {
 
     @Autowired
@@ -28,6 +27,7 @@ class MongoAuthorDeleteEventsListenerTest {
     private AuthorRepository authorRepository;
 
     @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     void shouldThrowExceptionByDeleteAuthorWithBooksWithHim() {
         Author author = mongoOperations.findOne(query(where("name").is("Tolstoy")), Author.class);
         assertThrows(RuntimeException.class, () -> authorRepository.delete(author));

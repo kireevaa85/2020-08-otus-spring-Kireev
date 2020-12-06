@@ -1,4 +1,4 @@
-package ru.otus.mapper.book;
+package ru.otus.mapper;
 
 import org.mapstruct.Mapper;
 import ru.otus.domain.Author;

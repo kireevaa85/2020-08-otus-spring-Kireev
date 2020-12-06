@@ -10,10 +10,6 @@ import ru.otus.dto.AuthorDto;
 import ru.otus.dto.BookDto;
 import ru.otus.dto.CommentDto;
 import ru.otus.dto.GenreDto;
-import ru.otus.mapper.book.AuthorMapper;
-import ru.otus.mapper.book.BookMapper;
-import ru.otus.mapper.book.CommentMapper;
-import ru.otus.mapper.book.GenreMapper;
 
 import java.util.List;
 
