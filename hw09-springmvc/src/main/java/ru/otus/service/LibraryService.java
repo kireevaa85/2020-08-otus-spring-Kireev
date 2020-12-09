@@ -10,11 +10,15 @@ import java.util.Optional;
 
 public interface LibraryService {
 
+    Optional<Author> getAuthorById(String id);
+
     List<Author> getAllAuthors();
 
     Author saveAuthor(Author author);
 
     void deleteAuthorById(String id);
+
+    Optional<Genre> getGenreById(String id);
 
     List<Genre> getAllGenres();
 

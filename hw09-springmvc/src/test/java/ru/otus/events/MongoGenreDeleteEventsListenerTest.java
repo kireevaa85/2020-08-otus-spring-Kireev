@@ -19,7 +19,6 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @DisplayName("Удаление жанра при наличии/отсутствии с ним книг")
 @DataMongoTest
 @ComponentScan({"ru.otus.repository", "ru.otus.events"})
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class MongoGenreDeleteEventsListenerTest {
 
     @Autowired
@@ -29,6 +28,7 @@ class MongoGenreDeleteEventsListenerTest {
     private GenreRepository genreRepository;
 
     @Test
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     void shouldThrowExceptionByDeleteGenreWithBooksWithHim() {
         Genre genre = mongoOperations.findOne(query(where("name").is("Novel")), Genre.class);
         assertThrows(RuntimeException.class, () -> genreRepository.delete(genre));

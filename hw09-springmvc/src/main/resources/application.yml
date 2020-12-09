@@ -5,8 +5,6 @@ spring:
       database: library
 
 mongock:
-  #runner-type: "ApplicationRunner" # default
-  runner-type: "InitializingBean" # Если используется Shell, чтобы не было конфликтов
   change-logs-scan-package:
     - ru.otus.mongock.changelog
 

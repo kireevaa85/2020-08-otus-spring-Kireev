@@ -25,6 +25,12 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     @Transactional(readOnly = true)
+    public Optional<Author> getAuthorById(String id) {
+        return authorRepository.findById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<Author> getAllAuthors() {
         return authorRepository.findAll();
     }
@@ -39,6 +45,12 @@ public class LibraryServiceImpl implements LibraryService {
     @Transactional
     public void deleteAuthorById(String id) {
         authorRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Genre> getGenreById(String id) {
+        return genreRepository.findById(id);
     }
 
     @Override

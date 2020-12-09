@@ -1,6 +1,7 @@
 package ru.otus.repository;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -19,7 +20,6 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 
 @DataMongoTest
 @DisplayName("Repository для работы с книгами должно")
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BookRepositoryTest {
     private static final int EXPECTED_BOOKS_COUNT = 5;
 
@@ -37,7 +37,6 @@ class BookRepositoryTest {
     }
 
     @Test
-    @Order(Integer.MAX_VALUE)
     @DisplayName("обновляет данные книги в БД")
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void saveMerge() {
@@ -56,7 +55,6 @@ class BookRepositoryTest {
     }
 
     @Test
-    @Order(Integer.MAX_VALUE - 1)
     @DisplayName("добавлять книгу в БД")
     @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void savePersist() {
