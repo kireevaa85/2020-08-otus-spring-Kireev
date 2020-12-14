@@ -17,7 +17,7 @@ import ru.otus.service.LibraryService;
 
 @RequiredArgsConstructor
 @Controller
-public class BookController {
+public class LibraryController {
     private final LibraryService libraryService;
     private final Mapper mapper;
 

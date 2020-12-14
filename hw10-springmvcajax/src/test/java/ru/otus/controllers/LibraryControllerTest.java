@@ -23,8 +23,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(value = BookController.class)
-class BookControllerTest {
+@WebMvcTest(value = LibraryController.class)
+class LibraryControllerTest {
 
     @Autowired
     private MockMvc mvc;

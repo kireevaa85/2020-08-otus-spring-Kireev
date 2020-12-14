@@ -11,6 +11,7 @@ hw06-hibernateormjpql - "Приложение, хранящее информац
 hw07-springdatajpa - "Приложение, хранящее информацию о книгах в библиотеке (на Spring Data JPA)"<br>
 hw08-springdatamongo - "Приложение, хранящее информацию о книгах в библиотеке (на Spring Data Mongo)"<br>
 hw09-springmvc - "CRUD приложение с Web UI и хранением данных в БД (на Spring Thymeleaf)"
+hw10-springmvcajax - "CRUD приложение с Web UI и хранением данных в БД (на Spring Thymeleaf) c AJAX"
 <br>
 
 Студент:<br>
