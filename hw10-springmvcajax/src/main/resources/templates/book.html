@@ -73,7 +73,7 @@
 </table>
 <script>
     $(function () {
-        $.get('/comments').done(function (comments) {
+        $.get('/api/comments').done(function (comments) {
             comments.forEach(function (comment) {
                 $('tbody').append(`
                     <tr>

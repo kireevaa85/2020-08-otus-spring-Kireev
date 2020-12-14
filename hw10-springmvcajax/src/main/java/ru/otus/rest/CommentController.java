@@ -17,7 +17,7 @@ public class CommentController {
     private final LibraryService libraryService;
     private final Mapper mapper;
 
-    @GetMapping("/comments")
+    @GetMapping("/api/comments")
     public List<CommentDto> getComments(@RequestParam String bookId) throws NotFoundException {
         return mapper.sourceToListCommentDto(libraryService.getAllCommentsByBook(libraryService.getBookById(bookId).orElseThrow(NotFoundException::new)));
     }
