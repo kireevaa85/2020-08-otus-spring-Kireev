@@ -33,7 +33,6 @@ public class LibraryController {
             Book book = libraryService.getBookById(id).orElseThrow(NotFoundException::new);
             BookDto bookDto = mapper.sourceToBookDto(book);
             model.addAttribute("book", bookDto);
-            model.addAttribute("comments", mapper.sourceToListCommentDto(libraryService.getAllCommentsByBook(book)));
         }
         model.addAttribute("authors", mapper.sourceToListAuthorDto(libraryService.getAllAuthors()));
         model.addAttribute("genres", mapper.sourceToListGenreDto(libraryService.getAllGenres()));

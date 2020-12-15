@@ -9,6 +9,7 @@ import ru.otus.dto.CommentDto;
 import ru.otus.mapper.Mapper;
 import ru.otus.service.LibraryService;
 
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -18,8 +19,12 @@ public class CommentController {
     private final Mapper mapper;
 
     @GetMapping("/api/comments")
-    public List<CommentDto> getComments(@RequestParam String bookId) throws NotFoundException {
-        return mapper.sourceToListCommentDto(libraryService.getAllCommentsByBook(libraryService.getBookById(bookId).orElseThrow(NotFoundException::new)));
+    public List<CommentDto> getComments(@RequestParam String bookId) {
+        try {
+            return mapper.sourceToListCommentDto(libraryService.getAllCommentsByBook(libraryService.getBookById(bookId).orElseThrow(NotFoundException::new)));
+        } catch (NotFoundException e) {
+            return Collections.emptyList();
+        }
     }
 
 }

@@ -57,7 +57,7 @@
     </div>
 </form>
 
-<table class="comments" th:if="${book?.id} != null and ${book?.id} != '' and ${!comments.isEmpty()}">
+<table class="comments" th:if="${book?.id} != null and ${book?.id} != ''">
     <thead>
     <tr>
         <th>Author</th>
@@ -65,15 +65,11 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="comment : ${comments}">
-        <td th:text="${comment.authorName}"></td>
-        <td th:text="${comment.comment}"></td>
-    </tr>
     </tbody>
 </table>
-<script>
+<script th:inline="javascript">
     $(function () {
-        $.get('/api/comments').done(function (comments) {
+        $.get('/api/comments?bookId=' + [[${book?.id}]]).done(function (comments) {
             comments.forEach(function (comment) {
                 $('tbody').append(`
                     <tr>
